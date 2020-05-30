@@ -1238,10 +1238,8 @@ The following general rules apply:
 
 ~~~~~
 struct {
-    opaque group_id<0..255>;
-    uint64 epoch;
     Sender sender;
-    ContentType content_type = commit;
+    GroupContext context;
     Commit commit;
 } MLSPlaintextCommitContent;
 
