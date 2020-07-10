@@ -12,10 +12,10 @@ stand_alone: yes
 pi: [toc, sortrefs, symrefs]
 
 author:
- -  ins: R. Barnes
-    name: Richard Barnes
-    organization: Cisco
-    email: rlb@ipv.sx
+ -  ins: B. McMillion
+    name: Brendan McMillion
+    organization: Cloudflare
+    email: brendan@cloudflare.com
  -  ins: B. Beurdouche
     name: Benjamin Beurdouche
     organization: Inria
