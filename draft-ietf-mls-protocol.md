@@ -2608,7 +2608,7 @@ the root key of a ratcheting tree. Only group members know their leaf
 private key in the group, therefore, the root key of the group's ratcheting
 tree is secret and thus so are all values derived from it.
 
-Initial leaf keys are known only by their owner and the group creator,
+Initial leaf keys are known oy by their owner and the group creator,
 because they are derived from an authenticated key exchange protocol.
 Subsequent leaf keys are known only by their owner. [[TODO: or by
 someone who replaced them.]]
