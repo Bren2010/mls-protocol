@@ -111,7 +111,7 @@ this problem has been studied thoroughly, with the Double Ratchet
 emerging as a common solution {{doubleratchet}} {{signal}}.
 Channels implementing the Double Ratchet enjoy fine-grained forward secrecy
 as well as post-compromise security, but are nonetheless efficient
-enough for heavy use over low-bandwidth networks.
+enough for heavy use over low-bandwidth networs.
 
 For a group of size greater than two, a common strategy is to
 unilaterally broadcast symmetric "sender" keys over existing shared
