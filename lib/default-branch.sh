@@ -2,6 +2,11 @@
 # Usage: $0 [remote]
 # Get the name of the remote HEAD for the named remote (default: origin).
 
+if [ -z "${DEFAULT_BRANCH}" ]; then
+    echo "${DEFAULT_BRANCH}"
+    return
+fi
+
 echo "DEFAULT-${DEFAULT_BRANCH}"
 origin="${1:-${GIT_REMOTE:-origin}}"
 echo "BRENDAN-${GIT_REMOTE}-$origin"
