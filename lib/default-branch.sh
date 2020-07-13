@@ -4,7 +4,7 @@
 
 if [ -n "${DEFAULT_BRANCH}" ]; then
     echo "${DEFAULT_BRANCH}"
-    return
+    exit 0
 fi
 
 echo "DEFAULT-${DEFAULT_BRANCH}"
