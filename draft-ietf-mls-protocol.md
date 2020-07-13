@@ -105,7 +105,7 @@ Instructions are on that page as well. Editorial changes can be
 managed in GitHub, but any substantive change should be discussed on
 the MLS mailing list.
 
-A group of users who want to send each other encrypted messages needs
+A group of users who want to send each other encrypted messages need
 a way to derive shared symmetric encryption keys. For two parties,
 this problem has been studied thoroughly, with the Double Ratchet
 emerging as a common solution {{doubleratchet}} {{signal}}.
