@@ -2,7 +2,7 @@
 # Usage: $0 [remote]
 # Get the name of the remote HEAD for the named remote (default: origin).
 
-if [ -z "${DEFAULT_BRANCH}" ]; then
+if [ -n "${DEFAULT_BRANCH}" ]; then
     echo "${DEFAULT_BRANCH}"
     return
 fi
