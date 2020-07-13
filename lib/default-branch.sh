@@ -12,5 +12,6 @@ if [[ "$branch" == "$origin/HEAD" ]]; then
     set -e
     git remote set-head -a "$origin" 2>/dev/null 1>&2
     branch=$(git rev-parse --abbrev-ref "$origin/HEAD" 2>/dev/null)
+    echo "MMMM"
 fi
 echo "${branch##*/}"
