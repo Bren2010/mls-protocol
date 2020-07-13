@@ -132,7 +132,7 @@ that enable asynchronous group keying with forward secrecy and
 post-compromise security.  Based on earlier work on "asynchronous
 ratcheting trees" {{art}}, the protocol presented here uses an
 asynchronous key-encapsulation mechanism for tree structures.
-This mechanism allows the members of the group to derive and update
+This mechanism allows the members of the group to derive and updat
 shared keys with costs that scale as the log of the group size.
 
 ##  Change Log

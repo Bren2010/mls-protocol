@@ -47,6 +47,7 @@ jobs:
       with:
         make: gh-pages
       env:
+        DEFAULT_BRANCH: master
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "Save HTML"

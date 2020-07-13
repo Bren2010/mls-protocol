@@ -81,7 +81,9 @@ endif
 # Github guesses
 GIT_REMOTE ?= origin
 export GIT_REMOTE
+BRENDAN1 := $(shell echo "1")
 DEFAULT_BRANCH := $(shell $(LIBDIR)/default-branch.sh $(GIT_REMOTE))
+BRENDAN2 := $(shell echo "2 ${DEFAULT_BRANCH}")
 ifeq (,$(CI_REPO_FULL))
 GITHUB_REPO_FULL := $(shell git ls-remote --get-url $(GIT_REMOTE) 2>/dev/null |\
 		      sed -e 's/^.*github\.com.//;s/\.git$$//')
