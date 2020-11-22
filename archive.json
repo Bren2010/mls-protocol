@@ -1,0 +1,76 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2020-10-29T01:00:01.254831+00:00",
+  "repo": "Bren2010/mls-protocol",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ3NjcwNDI4",
+      "title": "Steal MLS",
+      "url": "https://github.com/Bren2010/mls-protocol/pull/1",
+      "state": "OPEN",
+      "author": "Bren2010",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-07-10T22:34:45Z",
+      "updatedAt": "2020-07-12T21:07:52Z",
+      "baseRepository": "Bren2010/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "7d7b07325f618acd7d254be3bf5ea45615a1445e",
+      "headRepository": "Bren2010/mls-protocol",
+      "headRefName": "brendan/2020.7.2",
+      "headRefOid": "c87521b3e666af6414830d09dfdfab078c861aaa",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
