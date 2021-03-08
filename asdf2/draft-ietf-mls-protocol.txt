@@ -5,7 +5,7 @@
 Network Working Group                                          R. Barnes
 Internet-Draft                                                     Cisco
 Intended status: Informational                             B. Beurdouche
-Expires: 26 May 2021                                               Inria
+Expires: 9 September 2021                                          Inria
                                                              J. Millican
                                                                 Facebook
                                                                 E. Omara
@@ -14,7 +14,7 @@ Expires: 26 May 2021                                               Inria
                                                     University of Oxford
                                                                R. Robert
                                                                     Wire
-                                                        22 November 2020
+                                                            8 March 2021
 
 
               The Messaging Layer Security (MLS) Protocol
@@ -56,11 +56,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 May 2021.
+   This Internet-Draft will expire on 9 September 2021.
 
 Copyright Notice
 
-   Copyright (c) 2020 IETF Trust and the persons identified as the
+   Copyright (c) 2021 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -93,6 +93,8 @@ Table of Contents
      7.2.  Lifetime
      7.3.  KeyPackage Identifiers
      7.4.  Parent Hash
+       7.4.1.  Using Parent Hashes
+       7.4.2.  Verifying Parent Hashes
      7.5.  Tree Hashes
      7.6.  Group State
      7.7.  Update Paths
@@ -120,7 +122,8 @@ Table of Contents
        11.1.4.  PreSharedKey
        11.1.5.  ReInit
        11.1.6.  ExternalInit
-       11.1.7.  External Proposals
+       11.1.7.  AppAck
+       11.1.8.  External Proposals
      11.2.  Commit
        11.2.1.  External Commits
        11.2.2.  Welcoming New Members
@@ -197,6 +200,18 @@ Table of Contents
 1.1.  Change Log
 
    RFC EDITOR PLEASE DELETE THIS SECTION.
+
+   draft-11
+
+   *  Include subtree keys in parent hash (*)
+
+   *  Pin HPKE to draft-07 (*)
+
+   *  Move joiner secret to the end of the first key schedule epoch (*)
+
+   *  Add an AppAck proposal
+
+   *  Make initializations of transcript hashes consistent
 
    draft-10
 
@@ -405,7 +420,7 @@ Table of Contents
 
    Key Package:  A signed object describing a client's identity and
       capabilities, and including a hybrid public-key encryption (HPKE
-      [I-D.irtf-cfrg-hpke] ) public key that can be used to encrypt to
+      [I-D.irtf-cfrg-hpke]) public key that can be used to encrypt to
       that client.
 
    Initialization Key (InitKey):  A key package that is prepublished by
@@ -505,9 +520,9 @@ Table of Contents
    has received its Commit message back from the server does it update
    its state to reflect the new member's addition.
 
-   Upon receiving the Welcome message and the corresponding Commit, the
-   new member will be able to read and send new messages to the group.
-   Messages received before the client has joined the group are ignored.
+   Upon receiving the Welcome message, the new member will be able to
+   read and send new messages to the group.  Messages received before
+   the client has joined the group are ignored.
 
                                                                   Group
    A              B              C          Directory            Channel
@@ -521,33 +536,33 @@ Table of Contents
    |--------------------------------------------------------------->|
    |              |              |              |                   |
    |  Welcome(B)  |              |              |                   |
-   |------------->|state.init()  |              |                   |
+   |------------->|state.join()  |              |                   |
    |              |              |              |                   |
    |              |              |              | Add(A->AB)        |
    |              |              |              | Commit(Add)       |
    |<---------------------------------------------------------------|
-   |state.add(B)  |<------------------------------------------------|
-   |              |state.join()  |              |                   |
+   |state.add(B)  |              |              |                   |
+   |              |              |              |                   |
    |              |              |              |                   |
    |              |              |              | Add(AB->ABC)      |
    |              |              |              | Commit(Add)       |
    |--------------------------------------------------------------->|
    |              |              |              |                   |
    |              |  Welcome(C)  |              |                   |
-   |---------------------------->|state.init()  |                   |
+   |---------------------------->|state.join()  |                   |
    |              |              |              |                   |
    |              |              |              | Add(AB->ABC)      |
    |              |              |              | Commit(Add)       |
    |<---------------------------------------------------------------|
    |state.add(C)  |<------------------------------------------------|
-   |              |state.add(C)  |<---------------------------------|
-   |              |              |state.join()  |                   |
+   |              |state.add(C)  |              |                   |
+   |              |              |              |                   |
 
    Subsequent additions of group members proceed in the same way.  Any
    member of the group can download a KeyPackage for a new client and
    broadcast an Add message that the current group can use to update
    their state, and a Welcome message that the new client can use to
-   initialize its state.
+   initialize its state and join the group.
 
    To enforce the forward secrecy and post-compromise security of
    messages, each member periodically updates their leaf secret.  Any
@@ -741,8 +756,8 @@ Table of Contents
 
    *  A credential (only for leaf nodes)
 
-   *  A hash of the node's parent, as of the last time the node was
-      changed.
+   *  A hash of certain information about the node's parent, as of the
+      last time the node was changed (see Section 7.4).
 
    The conditions under which each of these values must or must not be
    present are laid out in Section 5.3.
@@ -898,14 +913,13 @@ Table of Contents
    a Commit message, who apply it to keep their local views of the tree
    in sync with the sender's.  More specifically, when a member commits
    a change to the tree (e.g., to add or remove a member), it transmits
-   an UpdatePath message containing a set of public and encrypted
-   private values for intermediate nodes in the direct path of a leaf.
-   The other members of the group use these values to update their view
-   of the tree, aligning their copy of the tree to the sender's.
+   an UpdatePath containing a set of public keys and encrypted private
+   keys for intermediate nodes in the direct path of its leaf.  The
+   other members of the group use these values to update their view of
+   the tree, aligning their copy of the tree to the sender's.
 
-   To transmit this update, the sender broadcasts to the group the
-   following information for each node in the direct path of the leaf,
-   including the root:
+   An UpdatePath contains the following information for each node in the
+   direct path of the sender's leaf, including the root:
 
    *  The public key for the node
 
@@ -914,10 +928,11 @@ Table of Contents
 
    The path secret value for a given node is encrypted for the subtree
    corresponding to the parent's non-updated child, that is, the child
-   on the copath of the leaf node.  There is one encrypted path secret
-   for each public key in the resolution of the non-updated child.
+   on the copath of the sender's leaf node.  There is one encryption of
+   the path secret to each public key in the resolution of the non-
+   updated child.
 
-   The recipient of a path update processes it with the following steps:
+   The recipient of an UpdatePath processes it with the following steps:
 
    1.  Compute the updated path secrets.
 
@@ -999,10 +1014,9 @@ Table of Contents
 
    *  A signature algorithm
 
-   The HPKE parameters are used to instantiate HPKE [I-D.irtf-cfrg-hpke]
-   for the purpose of public-key encryption.  The "DeriveKeyPair"
-   function associated to the KEM for the ciphersuite maps octet strings
-   to HPKE key pairs.
+   MLS uses draft-07 of HPKE [I-D.irtf-cfrg-hpke] for public-key
+   encryption.  The "DeriveKeyPair" function associated to the KEM for
+   the ciphersuite maps octet strings to HPKE key pairs.
 
    Ciphersuites are represented with the CipherSuite type.  HPKE public
    keys are opaque values in a format defined by the underlying protocol
@@ -1198,37 +1212,101 @@ Table of Contents
 
 7.4.  Parent Hash
 
-   The "parent_hash" extension serves to bind a KeyPackage to all the
-   nodes above it in the group's ratchet tree.  This enforces the tree
-   invariant, meaning that malicious members can't lie about the state
-   of the ratchet tree when they send Welcome messages to new members.
-
-   opaque parent_hash<0..255>;
-
-   This extension MUST be present in all Updates that are sent as part
-   of a Commit message.  If the extension is present, clients MUST
-   verify that "parent_hash" matches the hash of the leaf's parent node
-   when represented as a ParentNode struct.
+   Consider a ratchet tree with a parent node P and children V and S.
+   The parent hash of P changes whenever an "UpdatePath" object is
+   applied to the ratchet tree along a path traversing node V (and hence
+   also P).  The new "Parent Hash of P (with Co-Path Child S)" is
+   obtained by hashing P's "ParentHashInput" struct using the resolution
+   of S to populate the "original_child_resolution" field.  This way,
+   P's Parent Hash fixes the new HPKE public keys of all nodes on the
+   path from P to the root.  Furthermore, for each such key PK the hash
+   also binds the set of HPKE public keys to which PK's secret key was
+   encrypted in the commit packet that anounced the "UpdatePath" object.
 
    struct {
        HPKEPublicKey public_key;
-       uint32 unmerged_leaves<0..2^32-1>;
        opaque parent_hash<0..255>;
-   } ParentNode;
+       HPKEPublicKey original_child_resolution<0..2^32-1>;
+   } ParentHashInput;
+
+   The Parent Hash of P with Co-Path Child S is the hash of a
+   "ParentHashInput" object populated as follows.  The field
+   "public_key" contains the HPKE public key of P.  If P is the root,
+   then "parent_hash" is set to a zero-length octet string.  Otherwise
+   "parent_hash" is the Parent Hash of P's parent with P's sibling as
+   the co-path child.
+
+   Finally, "original_child_resolution" is the array of "HPKEPublicKey"
+   values of the nodes in the resolution of S but with the
+   "unmerged_leaves" of P omitted.  For example, in the ratchet tree
+   depicted in Section 5.2 the "ParentHashInput" of node 5 with co-path
+   child 4 would contain an empty "original_child_resolution" since 4's
+   resolution includes only itself but 4 is also an unmerged leaf of 5.
+   Meanwhile, the "ParentHashInput" of node 5 with co-path child 6 has
+   an array with one element in it: the HPKE public key of 6.
+
+7.4.1.  Using Parent Hashes
+
+   The Parent Hash of P appears in three types of structs.  If V is
+   itself a parent node then P's Parent Hash is stored in the
+   "parent_hash" fields of both V's "ParentHashInput" struct and V's
+   "ParentNode" struct.  (The "ParentNode" struct is used to encapsulate
+   all public information about V that must be conveyed to a new member
+   joining the group as well as to define the Tree Hash of node V.)
+
+   If, on the other hand, V is a leaf and its KeyPackage contains the
+   "parent_hash" extension then the Parent Hash of P (with V's sibling
+   as co-path child) is stored in that field.  In particular, the
+   extension MUST be present in the "leaf_key_package" field of an
+   "UpdatePath" object.  (This way, the signature of such a KeyPackage
+   also serves to attest to which keys the group member introduced into
+   the ratchet tree and to whom the corresponding secret keys were sent.
+   This helps prevent malicious insiders from constructing artificial
+   ratchet trees with a node V whose HPKE secret key is known to the
+   insider yet where the insider isn't assigned a leaf in the subtree
+   rooted at V.  Indeed, such a ratchet tree would violate the tree
+   invariant.)
+
+7.4.2.  Verifying Parent Hashes
+
+   To this end, when processing a Commit message clients MUST recompute
+   the expected value of "parent_hash" for the committer's new leaf and
+   verify that it matches the "parent_hash" value in the supplied
+   "leaf_key_package".  Moreover, when joining a group, new members MUST
+   authenticate each non-blank parent node P.  A parent node P is
+   authenticated by performing the following check:
+
+   *  Let L and R be the left and right children of P, respectively
+
+   *  If L.parent_hash is equal to the Parent Hash of P with Co-Path
+      Child R, the check passes
+
+   *  If R is blank, replace R with its left child until R is either
+      non-blank or a leaf node
+
+   *  If R is a leaf node, the check fails
+
+   *  If R.parent_hash is equal to the Parent Hash of P with Co-Path
+      Child L, the check passes
+
+   *  Otherwise, the check fails
+
+   The left-child recursion under the right child of P is necessary
+   because the expansion of the tree to the right due to Add proposals
+   can cause blank nodes to be interposed between a parent node and its
+   right child.
 
 7.5.  Tree Hashes
 
    To allow group members to verify that they agree on the public
    cryptographic state of the group, this section defines a scheme for
-   generating a hash value that represents the contents of the group's
-   ratchet tree and the members' KeyPackages.
+   generating a hash value (called the "tree hash") that represents the
+   contents of the group's ratchet tree and the members' KeyPackages.
+   The tree hash of a tree is the tree hash of its root node, which we
+   define recursively, starting with the leaves.
 
-   The hash of a tree is the hash of its root node, which we define
-   recursively, starting with the leaves.
-
-   Elements of the ratchet tree are called "Node" objects and the leaves
-   contain an optional "KeyPackage", while the parents contain an
-   optional "ParentNode".
+   As some nodes may be blank while others contain data we use the
+   following struct to include data if present.
 
    struct {
        uint8 present;
@@ -1238,19 +1316,9 @@ Table of Contents
        }
    } optional<T>;
 
-   When computing the hash of a parent node, the "ParentNodeHashInput"
-   structure is used:
-
-   struct {
-       uint32 node_index;
-       optional<ParentNode> parent_node;
-       opaque left_hash<0..255>;
-       opaque right_hash<0..255>;
-   } ParentNodeHashInput;
-
-   The "left_hash" and "right_hash" fields hold the hashes of the node's
-   left and right children, respectively.  When computing the hash of a
-   leaf node, the hash of a "LeafNodeHashInput" object is used:
+   The tree hash of a leaf node is the hash of leaf's
+   "LeafNodeHashInput" object which might include a Key Package
+   depending on whether or not it is blank.
 
    struct {
        uint32 node_index;
@@ -1260,6 +1328,26 @@ Table of Contents
    Note that the "node_index" field contains the index of the leaf among
    the nodes in the tree, not its index among the leaves; "node_index =
    2 * leaf_index".
+
+   Now the tree hash of any non-leaf node is recursively defined to be
+   the hash of its "ParentNodeTreeHashInput".  This includes an optional
+   "ParentNode" object depending on if the node is blank or not.
+
+   struct {
+       HPKEPublicKey public_key;
+       opaque parent_hash<0..255>;
+       uint32 unmerged_leaves<0..2^32-1>;
+   } ParentNode;
+
+   struct {
+       uint32 node_index;
+       optional<ParentNode> parent_node;
+       opaque left_hash<0..255>;
+       opaque right_hash<0..255>;
+   } ParentNodeTreeHashInput;
+
+   The "left_hash" and "right_hash" fields hold the tree hashes of the
+   node's left and right children, respectively.
 
 7.6.  Group State
 
@@ -1432,15 +1520,18 @@ Table of Contents
                    init_secret_[n-1]
                          |
                          V
-    commit_secret -> KDF.Extract = joiner_secret
+    commit_secret -> KDF.Extract
                          |
                          V
-                   Derive-Secret(., "member")
+                   DeriveSecret(., "joiner")
                          |
                          V
-psk_secret (or 0) -> KDF.Extract = member_secret
+                    joiner_secret
                          |
-                         +--> Derive-Secret(., "welcome")
+                         V
+psk_secret (or 0) -> KDF.Extract
+                         |
+                         +--> DeriveSecret(., "welcome")
                          |    = welcome_secret
                          |
                          V
@@ -1449,11 +1540,11 @@ psk_secret (or 0) -> KDF.Extract = member_secret
                          V
                     epoch_secret
                          |
-                         +--> Derive-Secret(., <label>)
+                         +--> DeriveSecret(., <label>)
                          |    = <secret>
                          |
                          V
-                   Derive-Secret(., "init")
+                   DeriveSecret(., "init")
                          |
                          V
                    init_secret_[n]
@@ -1735,9 +1826,9 @@ psk_secret     = psk_secret_[0] || ... || psk_secret_[n-1]
    ratchet of node index N in some epoch n.  Then, for that member, at
    least the following values have been consumed and MUST be deleted:
 
-   *  the "commit_secret", "joiner_secret", "member_secret",
-      "epoch_secret", "encryption_secret" of that epoch n as well as the
-      "init_secret" of the previous epoch n-1,
+   *  the "commit_secret", "joiner_secret", "epoch_secret",
+      "encryption_secret" of that epoch n as well as the "init_secret"
+      of the previous epoch n-1,
 
    *  all node secrets in the Secret Tree on the path from the root to
       the leaf with node index N,
@@ -1772,10 +1863,9 @@ psk_secret     = psk_secret_[0] || ... || psk_secret_[n-1]
    consume (at least) values G, F, D, AR0, AR1, K1, N1 as well as the
    key schedule secrets used to derive G (the "encryption_secret"),
    namely "init_secret" of epoch n-1 and "commit_secret",
-   "joiner_secret", "member_secret", "epoch_secret" of epoch n.  The
-   client MAY retain (not consume) the values K0 and N0 to allow for
-   out-of-order delivery, and SHOULD retain AR2 for processing future
-   messages.
+   "joiner_secret", "epoch_secret" of epoch n.  The client MAY retain
+   (not consume) the values K0 and N0 to allow for out-of-order
+   delivery, and SHOULD retain AR2 for processing future messages.
 
 8.6.  Exporters
 
@@ -1903,7 +1993,7 @@ psk_secret     = psk_secret_[0] || ... || psk_secret_[n-1]
    The field "confirmation_tag" MUST be present if "content_type" equals
    commit.  Otherwise, it MUST NOT be present.
 
-   External sender types are sent as MLSPlaintext, see Section 11.1.7
+   External sender types are sent as MLSPlaintext, see Section 11.1.8
    for their use.
 
    The remainder of this section describes how to compute the signature
@@ -2120,8 +2210,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
       that the chosen version and ciphersuite is the best option
       supported by all members.
 
-   *  Initialize a one-member group with the following initial values
-      (where "0" represents an all-zero vector of size KDF.Nh):
+   *  Initialize a one-member group with the following initial values:
 
       -  Ratchet tree: A tree with a single node, a leaf containing an
          HPKE public key and credential for the creator
@@ -2132,9 +2221,9 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
 
       -  Tree hash: The root hash of the above ratchet tree
 
-      -  Confirmed transcript hash: 0
+      -  Confirmed transcript hash: the zero-length octet string
 
-      -  Interim transcript hash: 0
+      -  Interim transcript hash: the zero-length octet string
 
       -  Init secret: a fresh random value of size "KDF.Nh"
 
@@ -2216,6 +2305,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
        psk(4),
        reinit(5),
        external_init(6),
+       app_ack(7),
        (255)
    } ProposalType;
 
@@ -2228,6 +2318,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
            case psk:           PreSharedKey;
            case reinit:        ReInit;
            case external_init: ExternalInit;
+           case app_ack:       AppAck;
        };
    } Proposal;
 
@@ -2304,6 +2395,9 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
    *  Blank the intermediate nodes along the path from the removed leaf
       to the root
 
+   *  Truncate the tree by reducing the size of tree until the rightmost
+      non-blank leaf node
+
 11.1.4.  PreSharedKey
 
    A PreSharedKey proposal can be used to request that a pre-shared key
@@ -2367,7 +2461,67 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
    Section 8.1.  The "kem_output" field contains the required KEM
    output.
 
-11.1.7.  External Proposals
+11.1.7.  AppAck
+
+   An AppAck proposal is used to acknowledge receipt of application
+   messages.  Though this information implies no change to the group, it
+   is structured as a Proposal message so that it is included in the
+   group's transcript by being included in Commit messages.
+
+   struct {
+       uint32 sender;
+       uint32 first_generation;
+       uint32 last_generation;
+   } MessageRange;
+
+   struct {
+       MessageRange received_ranges<0..2^32-1>;
+   } AppAck;
+
+   An AppAck proposal represents a set of messages received by the
+   sender in the current epoch.  Messages are represented by the
+   "sender" and "generation" values in the MLSCiphertext for the
+   message.  Each MessageRange represents receipt of a span of messages
+   whose "generation" values form a continuous range from
+   "first_generation" to "last_generation", inclusive.
+
+   AppAck proposals are sent as a guard against the Delivery Service
+   dropping application messages.  The sequential nature of the
+   "generation" field provides a degree of loss detection, since gaps in
+   the "generation" sequence indicate dropped messages.  AppAck
+   completes this story by addressing the scenario where the Delivery
+   Service drops all messages after a certain point, so that a later
+   generation is never observed.  Obviously, there is a risk that AppAck
+   messages could be suppressed as well, but their inclusion in the
+   transcript means that if they are suppressed then the group cannot
+   advance at all.
+
+   The schedule on which sending AppAck proposals are sent is up to the
+   application, and determines which cases of loss/suppression are
+   detected.  For example:
+
+   *  The application might have the committer include an AppAck
+      proposal whenever a Commit is sent, so that other members could
+      know when one of their messages did not reach the committer.
+
+   *  The application could have a client send an AppAck whenever an
+      application message is sent, covering all messages received since
+      its last AppAck.  This would provide a complete view of any losses
+      experienced by active members.
+
+   *  The application could simply have clients send AppAck proposals on
+      a timer, so that all participants' state would be known.
+
+   An application using AppAck proposals to guard against loss/
+   suppression of application messages also needs to ensure that AppAck
+   messages and the Commits that reference them are not dropped.  One
+   way to do this is to always encrypt Proposal and Commit messages, to
+   make it more difficult for the Delivery Service to recognize which
+   messages conatain AppAcks.  The application can also have clients
+   enforce an AppAck schedule, reporting loss if an AppAck is not
+   received at the expected time.
+
+11.1.8.  External Proposals
 
    Add and Remove proposals can be constructed and sent to the group by
    a party that is outside the group.  For example, a Delivery Service
@@ -2799,13 +2953,13 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
 
    In order to allow the same Welcome message to be sent to all new
    members, information describing the group is encrypted with a
-   symmetric key and nonce randomly chosen by the sender.  This key and
-   nonce are then encrypted to each new member using HPKE.  In the same
-   encrypted package, the committer transmits the path secret for the
-   lowest node contained in the direct paths of both the committer and
-   the new member.  This allows the new member to compute private keys
-   for nodes in its direct path that are being reset by the
-   corresponding Commit.
+   symmetric key and nonce derived from the "joiner_secret" for the new
+   epoch.  The "joiner_secret" is then encrypted to each new member
+   using HPKE.  In the same encrypted package, the committer transmits
+   the path secret for the lowest node contained in the direct paths of
+   both the committer and the new member.  This allows the new member to
+   compute private keys for nodes in its direct path that are being
+   reset by the corresponding Commit.
 
    If the sender of the Welcome message wants the receiving member to
    include a PSK in the derivation of the "epoch_secret", they can
@@ -2869,13 +3023,12 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
 
    *  From the "joiner_secret" in the decrypted GroupSecrets object and
       the PSKs specified in the "GroupSecrets", derive the
-      "member_secret" and using that the "welcome_secret",
-      "welcome_key", and "welcome_nonce".  Use the key and nonce to
-      decrypt the "encrypted_group_info" field.
+      "welcome_secret" and using that the "welcome_key" and
+      "welcome_nonce".  Use the key and nonce to decrypt the
+      "encrypted_group_info" field.
 
-   welcome_secret = Derive-Secret(member_secret, "welcome")
-   welcome_nonce = KDF.Expand(welcome_secret, "nonce", nonce_length)
-   welcome_key = KDF.Expand(welcome_secret, "key", key_length)
+   welcome_nonce = KDF.Expand(welcome_secret, "nonce", AEAD.Nn)
+   welcome_key = KDF.Expand(welcome_secret, "key", AEAD.Nk)
 
    *  Verify the signature on the GroupInfo object.  The signature input
       comprises all of the fields in the GroupInfo object except the
@@ -2892,7 +3045,10 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
          node's children are non-empty and have the hash of this node
          set as their "parent_hash" value (if the child is another
          parent) or has a "parent_hash" extension in the KeyPackage
-         containing the same value (if the child is a leaf).
+         containing the same value (if the child is a leaf).  If either
+         of the node's children is empty, and in particular does not
+         have a parent hash, then its respective children's
+         "parent_hash" values have to be considered instead.
 
       -  For each non-empty leaf node, verify the signature on the
          KeyPackage.
@@ -3243,7 +3399,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
    The second form of authentication is that group members can verify a
    message originated from a particular member of the group.  This is
    guaranteed by a digital signature on each message from the sender's
-   identity key.
+   signature key.
 
 15.3.  Forward Secrecy and Post-Compromise Security
 
@@ -3675,34 +3831,34 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
 18.1.  Normative References
 
    [I-D.irtf-cfrg-hpke]
-              Barnes, R., Bhargavan, K., Lipp, B., and C. Wood, "Hybrid
-              Public Key Encryption", Work in Progress, Internet-Draft,
-              draft-irtf-cfrg-hpke-06, 23 October 2020,
-              <http://www.ietf.org/internet-drafts/draft-irtf-cfrg-hpke-
-              06.txt>.
+              Barnes, R. L., Bhargavan, K., Lipp, B., and C. A. Wood,
+              "Hybrid Public Key Encryption", Work in Progress,
+              Internet-Draft, draft-irtf-cfrg-hpke-08, 15 February 2021,
+              <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
+              hpke-08.txt>.
 
    [RFC2104]  Krawczyk, H., Bellare, M., and R. Canetti, "HMAC: Keyed-
               Hashing for Message Authentication", RFC 2104,
               DOI 10.17487/RFC2104, February 1997,
-              <https://www.rfc-editor.org/info/rfc2104>.
+              <https://datatracker.ietf.org/doc/html/rfc2104>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
+              <https://datatracker.ietf.org/doc/html/rfc2119>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/info/rfc8126>.
+              <https://datatracker.ietf.org/doc/html/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+              May 2017, <https://datatracker.ietf.org/doc/html/rfc8174>.
 
    [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
               Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
-              <https://www.rfc-editor.org/info/rfc8446>.
+              <https://datatracker.ietf.org/doc/html/rfc8446>.
 
 18.2.  Informative References
 
@@ -3737,20 +3893,20 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
               A., and A. Duric, "The Messaging Layer Security (MLS)
               Architecture", Work in Progress, Internet-Draft, draft-
               ietf-mls-architecture-05, 26 July 2020,
-              <http://www.ietf.org/internet-drafts/draft-ietf-mls-
+              <https://datatracker.ietf.org/doc/html/draft-ietf-mls-
               architecture-05.txt>.
 
    [I-D.ietf-trans-rfc6962-bis]
               Laurie, B., Langley, A., Kasper, E., Messeri, E., and R.
               Stradling, "Certificate Transparency Version 2.0", Work in
               Progress, Internet-Draft, draft-ietf-trans-rfc6962-bis-34,
-              4 November 2019, <http://www.ietf.org/internet-drafts/
+              4 November 2019, <https://datatracker.ietf.org/doc/html/
               draft-ietf-trans-rfc6962-bis-34.txt>.
 
    [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
               Signature Algorithm (EdDSA)", RFC 8032,
               DOI 10.17487/RFC8032, January 2017,
-              <https://www.rfc-editor.org/info/rfc8032>.
+              <https://datatracker.ietf.org/doc/html/rfc8032>.
 
    [SECG]     "Elliptic Curve Cryptography, Standards for Efficient
               Cryptography Group, ver. 2", 2009,

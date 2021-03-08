@@ -23,26 +23,26 @@ protocol that provides efficient asynchronous group key establishment
 with forward secrecy and post-compromise security for groups
 in size ranging from two to thousands. 
     " name="description">
-<meta content="xml2rfc 3.4.0" name="generator">
+<meta content="xml2rfc 3.5.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-mls-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.4.0
-    Python 3.8.5
+  xml2rfc 3.5.0
+    Python 3.8.7
     appdirs 1.4.4
     ConfigArgParse 1.2.3
     google-i18n-address 2.4.0
     html5lib 1.1
-    intervaltree 3.0.2
+    intervaltree 3.1.0
     Jinja2 2.11.2
     kitchen 1.2.6
-    lxml 4.5.0
-    pycountry 19.8.18
-    pyflakes 2.1.1
-    PyYAML 5.3.1
-    requests 2.22.0
-    setuptools 45.2.0
-    six 1.14.0
+    lxml 4.6.2
+    pycountry 20.7.3
+    pyflakes 2.2.0
+    PyYAML 5.4.1
+    requests 2.25.1
+    setuptools 51.3.3
+    six 1.15.0
 -->
 <link href="draft-ietf-mls-protocol.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -55,7 +55,23 @@ html {
   --link-color: #2a6496;
   --highlight-color: #f9f9f9;
   --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
   --small-font-size: 14.5px;
+  scrollbar-color: #bbb #eee;
+}
+@media (prefers-color-scheme: dark) {
+html {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
 }
 body {
   max-width: 600px;
@@ -87,11 +103,11 @@ body {
 }
 h1, h2, h3 {
   font-size: 22px;
-  line-height: 26px;
+  line-height: 27px;
 }
 h4, h5, h6 {
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 24px;
 }
 
 /* general structure */
@@ -247,6 +263,7 @@ img {
 }
 figure {
   margin: 0.5em 0;
+  padding: 0;
 }
 figure blockquote {
   margin: 0.8em 0.4em 0.4em;
@@ -271,10 +288,6 @@ figcaption, caption {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
-  }
-  table {
-    display: inline-block;
-    overflow-x: auto;
   }
 }
 
@@ -346,17 +359,23 @@ table p {
 /* pilcrow */
 a.pilcrow {
   margin-left: 3px;
-  visibility: hidden;
+  opacity: 0.2;
   user-select: none;
 }
-a.pilcrow[href] { color: #ddd; }
+a.pilcrow[href] { color: var(--pilcrow-weak); }
 a.pilcrow[href]:hover { text-decoration: none; }
-@media screen {
+@media not print {
   :hover > a.pilcrow {
-    visibility: visible;
+    opacity: 1;
   }
-  a.pilcrow:hover {
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
     background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
   }
 }
 
@@ -832,11 +851,11 @@ address div.right {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">MLS</td>
-<td class="right">November 2020</td>
+<td class="right">March 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Barnes, et al.</td>
-<td class="center">Expires 26 May 2021</td>
+<td class="center">Expires 9 September 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -849,12 +868,12 @@ address div.right {
 <dd class="internet-draft">draft-ietf-mls-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-11-22" class="published">22 November 2020</time>
+<time datetime="2021-03-08" class="published">8 March 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-05-26">26 May 2021</time></dd>
+<dd class="expires"><time datetime="2021-09-09">9 September 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -925,7 +944,7 @@ in size ranging from two to thousands.<a href="#section-abstract-1" class="pilcr
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 May 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 September 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -934,7 +953,7 @@ in size ranging from two to thousands.<a href="#section-abstract-1" class="pilcr
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2020 IETF Trust and the persons identified as the
+            Copyright (c) 2021 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -953,265 +972,276 @@ in size ranging from two to thousands.<a href="#section-abstract-1" class="pilcr
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.1">
+<nav class="toc"><ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-change-log" class="xref">Change Log</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.2">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-terminology" class="xref">Terminology</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.3">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-basic-assumptions" class="xref">Basic Assumptions</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.4">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-protocol-overview" class="xref">Protocol Overview</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.5">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-ratchet-trees" class="xref">Ratchet Trees</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.5.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-tree-computation-terminolog" class="xref">Tree Computation Terminology</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-ratchet-tree-nodes" class="xref">Ratchet Tree Nodes</a><a href="#section-toc.1-1.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-views-of-a-ratchet-tree" class="xref">Views of a Ratchet Tree</a><a href="#section-toc.1-1.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-ratchet-tree-evolution" class="xref">Ratchet Tree Evolution</a><a href="#section-toc.1-1.5.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.5">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.5.2.5">
                 <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-synchronizing-views-of-the-" class="xref">Synchronizing Views of the Tree</a><a href="#section-toc.1-1.5.2.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.6">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-cryptographic-objects" class="xref">Cryptographic Objects</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.6.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-ciphersuites" class="xref">Ciphersuites</a><a href="#section-toc.1-1.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.6.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-credentials" class="xref">Credentials</a><a href="#section-toc.1-1.6.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.7">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-key-packages" class="xref">Key Packages</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.7.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-client-capabilities" class="xref">Client Capabilities</a><a href="#section-toc.1-1.7.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-lifetime" class="xref">Lifetime</a><a href="#section-toc.1-1.7.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.3">
                 <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-keypackage-identifiers" class="xref">KeyPackage Identifiers</a><a href="#section-toc.1-1.7.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.4">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.4">
                 <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-parent-hash" class="xref">Parent Hash</a><a href="#section-toc.1-1.7.2.4.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.7.2.4.2.1">
+                    <p id="section-toc.1-1.7.2.4.2.1.1"><a href="#section-7.4.1" class="xref">7.4.1</a>.  <a href="#name-using-parent-hashes" class="xref">Using Parent Hashes</a><a href="#section-toc.1-1.7.2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.5">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.4.2.2">
+                    <p id="section-toc.1-1.7.2.4.2.2.1"><a href="#section-7.4.2" class="xref">7.4.2</a>.  <a href="#name-verifying-parent-hashes" class="xref">Verifying Parent Hashes</a><a href="#section-toc.1-1.7.2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.5">
                 <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-tree-hashes" class="xref">Tree Hashes</a><a href="#section-toc.1-1.7.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.6">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.6">
                 <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-group-state" class="xref">Group State</a><a href="#section-toc.1-1.7.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.7">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.7.2.7">
                 <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="xref">7.7</a>.  <a href="#name-update-paths" class="xref">Update Paths</a><a href="#section-toc.1-1.7.2.7.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.8">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-key-schedule" class="xref">Key Schedule</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-external-initialization" class="xref">External Initialization</a><a href="#section-toc.1-1.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-pre-shared-keys" class="xref">Pre-Shared Keys</a><a href="#section-toc.1-1.8.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.3">
                 <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-secret-tree" class="xref">Secret Tree</a><a href="#section-toc.1-1.8.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.4">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.4">
                 <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-encryption-keys" class="xref">Encryption Keys</a><a href="#section-toc.1-1.8.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.5">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.5">
                 <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-deletion-schedule" class="xref">Deletion Schedule</a><a href="#section-toc.1-1.8.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.6">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.6">
                 <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="xref">8.6</a>.  <a href="#name-exporters" class="xref">Exporters</a><a href="#section-toc.1-1.8.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.7">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.7">
                 <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="xref">8.7</a>.  <a href="#name-resumption-secret" class="xref">Resumption Secret</a><a href="#section-toc.1-1.8.2.7.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.8">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.8.2.8">
                 <p id="section-toc.1-1.8.2.8.1"><a href="#section-8.8" class="xref">8.8</a>.  <a href="#name-state-authentication-keys" class="xref">State Authentication Keys</a><a href="#section-toc.1-1.8.2.8.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.9">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-message-framing" class="xref">Message Framing</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.9.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.9.2.1">
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-content-authentication" class="xref">Content Authentication</a><a href="#section-toc.1-1.9.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.9.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.9.2.2">
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-content-encryption" class="xref">Content Encryption</a><a href="#section-toc.1-1.9.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.9.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.9.2.3">
                 <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-sender-data-encryption" class="xref">Sender Data Encryption</a><a href="#section-toc.1-1.9.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.10">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-group-creation" class="xref">Group Creation</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.10.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.10.2.1">
                 <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-linking-a-new-group-to-an-e" class="xref">Linking a New Group to an Existing Group</a><a href="#section-toc.1-1.10.2.1.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.10.2.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.10.2.1.2.1">
                     <p id="section-toc.1-1.10.2.1.2.1.1"><a href="#section-10.1.1" class="xref">10.1.1</a>.  <a href="#name-sub-group-branching" class="xref">Sub-group Branching</a><a href="#section-toc.1-1.10.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.11">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.11">
             <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-group-evolution" class="xref">Group Evolution</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1">
                 <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-proposals" class="xref">Proposals</a><a href="#section-toc.1-1.11.2.1.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.1">
                     <p id="section-toc.1-1.11.2.1.2.1.1"><a href="#section-11.1.1" class="xref">11.1.1</a>.  <a href="#name-add" class="xref">Add</a><a href="#section-toc.1-1.11.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.2">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.2">
                     <p id="section-toc.1-1.11.2.1.2.2.1"><a href="#section-11.1.2" class="xref">11.1.2</a>.  <a href="#name-update" class="xref">Update</a><a href="#section-toc.1-1.11.2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.3">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.3">
                     <p id="section-toc.1-1.11.2.1.2.3.1"><a href="#section-11.1.3" class="xref">11.1.3</a>.  <a href="#name-remove" class="xref">Remove</a><a href="#section-toc.1-1.11.2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.4">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.4">
                     <p id="section-toc.1-1.11.2.1.2.4.1"><a href="#section-11.1.4" class="xref">11.1.4</a>.  <a href="#name-presharedkey" class="xref">PreSharedKey</a><a href="#section-toc.1-1.11.2.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.5">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.5">
                     <p id="section-toc.1-1.11.2.1.2.5.1"><a href="#section-11.1.5" class="xref">11.1.5</a>.  <a href="#name-reinit" class="xref">ReInit</a><a href="#section-toc.1-1.11.2.1.2.5.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.6">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.6">
                     <p id="section-toc.1-1.11.2.1.2.6.1"><a href="#section-11.1.6" class="xref">11.1.6</a>.  <a href="#name-externalinit" class="xref">ExternalInit</a><a href="#section-toc.1-1.11.2.1.2.6.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.1.2.7">
-                    <p id="section-toc.1-1.11.2.1.2.7.1"><a href="#section-11.1.7" class="xref">11.1.7</a>.  <a href="#name-external-proposals" class="xref">External Proposals</a><a href="#section-toc.1-1.11.2.1.2.7.1" class="pilcrow">¶</a></p>
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.7">
+                    <p id="section-toc.1-1.11.2.1.2.7.1"><a href="#section-11.1.7" class="xref">11.1.7</a>.  <a href="#name-appack" class="xref">AppAck</a><a href="#section-toc.1-1.11.2.1.2.7.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.1.2.8">
+                    <p id="section-toc.1-1.11.2.1.2.8.1"><a href="#section-11.1.8" class="xref">11.1.8</a>.  <a href="#name-external-proposals" class="xref">External Proposals</a><a href="#section-toc.1-1.11.2.1.2.8.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.2">
                 <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-commit" class="xref">Commit</a><a href="#section-toc.1-1.11.2.2.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.11.2.2.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.11.2.2.2.1">
                     <p id="section-toc.1-1.11.2.2.2.1.1"><a href="#section-11.2.1" class="xref">11.2.1</a>.  <a href="#name-external-commits" class="xref">External Commits</a><a href="#section-toc.1-1.11.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.2.2.2">
+                  <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.2.2.2">
                     <p id="section-toc.1-1.11.2.2.2.2.1"><a href="#section-11.2.2" class="xref">11.2.2</a>.  <a href="#name-welcoming-new-members" class="xref">Welcoming New Members</a><a href="#section-toc.1-1.11.2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.11.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.11.2.3">
                 <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="xref">11.3</a>.  <a href="#name-ratchet-tree-extension" class="xref">Ratchet Tree Extension</a><a href="#section-toc.1-1.11.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.12">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.12">
             <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-extensibility" class="xref">Extensibility</a><a href="#section-toc.1-1.12.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.13">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.13">
             <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-sequencing-of-state-changes" class="xref">Sequencing of State Changes</a><a href="#section-toc.1-1.13.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.13.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.13.2.1">
                 <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="xref">13.1</a>.  <a href="#name-server-enforced-ordering" class="xref">Server-Enforced Ordering</a><a href="#section-toc.1-1.13.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.13.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.13.2.2">
                 <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="xref">13.2</a>.  <a href="#name-client-enforced-ordering" class="xref">Client-Enforced Ordering</a><a href="#section-toc.1-1.13.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.14">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.14">
             <p id="section-toc.1-1.14.1"><a href="#section-14" class="xref">14</a>. <a href="#name-application-messages" class="xref">Application Messages</a><a href="#section-toc.1-1.14.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.14.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.14.2.1">
                 <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="xref">14.1</a>.  <a href="#name-message-encryption-and-decr" class="xref">Message Encryption and Decryption</a><a href="#section-toc.1-1.14.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.14.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.14.2.2">
                 <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="xref">14.2</a>.  <a href="#name-restrictions" class="xref">Restrictions</a><a href="#section-toc.1-1.14.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.14.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.14.2.3">
                 <p id="section-toc.1-1.14.2.3.1"><a href="#section-14.3" class="xref">14.3</a>.  <a href="#name-delayed-and-reordered-appli" class="xref">Delayed and Reordered Application messages</a><a href="#section-toc.1-1.14.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.15">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.15">
             <p id="section-toc.1-1.15.1"><a href="#section-15" class="xref">15</a>. <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.15.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.15.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.15.2.1">
                 <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="xref">15.1</a>.  <a href="#name-confidentiality-of-the-grou" class="xref">Confidentiality of the Group Secrets</a><a href="#section-toc.1-1.15.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.15.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.15.2.2">
                 <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="xref">15.2</a>.  <a href="#name-authentication" class="xref">Authentication</a><a href="#section-toc.1-1.15.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.15.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.15.2.3">
                 <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="xref">15.3</a>.  <a href="#name-forward-secrecy-and-post-co" class="xref">Forward Secrecy and Post-Compromise Security</a><a href="#section-toc.1-1.15.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.15.2.4">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.15.2.4">
                 <p id="section-toc.1-1.15.2.4.1"><a href="#section-15.4" class="xref">15.4</a>.  <a href="#name-initkey-reuse" class="xref">InitKey Reuse</a><a href="#section-toc.1-1.15.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.15.2.5">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.15.2.5">
                 <p id="section-toc.1-1.15.2.5.1"><a href="#section-15.5" class="xref">15.5</a>.  <a href="#name-group-fragmentation-by-mali" class="xref">Group Fragmentation by Malicious Insiders</a><a href="#section-toc.1-1.15.2.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.16">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.16">
             <p id="section-toc.1-1.16.1"><a href="#section-16" class="xref">16</a>. <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.16.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.16.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.16.2.1">
                 <p id="section-toc.1-1.16.2.1.1"><a href="#section-16.1" class="xref">16.1</a>.  <a href="#name-mls-ciphersuites" class="xref">MLS Ciphersuites</a><a href="#section-toc.1-1.16.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.16.2.2">
                 <p id="section-toc.1-1.16.2.2.1"><a href="#section-16.2" class="xref">16.2</a>.  <a href="#name-mls-extension-types" class="xref">MLS Extension Types</a><a href="#section-toc.1-1.16.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.3">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.16.2.3">
                 <p id="section-toc.1-1.16.2.3.1"><a href="#section-16.3" class="xref">16.3</a>.  <a href="#name-mls-credential-types" class="xref">MLS Credential Types</a><a href="#section-toc.1-1.16.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.16.2.4">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.16.2.4">
                 <p id="section-toc.1-1.16.2.4.1"><a href="#section-16.4" class="xref">16.4</a>.  <a href="#name-mls-designated-expert-pool" class="xref">MLS Designated Expert Pool</a><a href="#section-toc.1-1.16.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.17">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.17">
             <p id="section-toc.1-1.17.1"><a href="#section-17" class="xref">17</a>. <a href="#name-contributors" class="xref">Contributors</a><a href="#section-toc.1-1.17.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.18">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.18">
             <p id="section-toc.1-1.18.1"><a href="#section-18" class="xref">18</a>. <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.18.1" class="pilcrow">¶</a></p>
-<ul class="compact toc ulEmpty">
-<li class="compact toc ulEmpty" id="section-toc.1-1.18.2.1">
+<ul class="toc ulEmpty compact">
+<li class="toc ulEmpty compact" id="section-toc.1-1.18.2.1">
                 <p id="section-toc.1-1.18.2.1.1"><a href="#section-18.1" class="xref">18.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.18.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="compact toc ulEmpty" id="section-toc.1-1.18.2.2">
+              <li class="toc ulEmpty compact" id="section-toc.1-1.18.2.2">
                 <p id="section-toc.1-1.18.2.2.1"><a href="#section-18.2" class="xref">18.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.18.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.19">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.19">
             <p id="section-toc.1-1.19.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-tree-math" class="xref">Tree Math</a><a href="#section-toc.1-1.19.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact toc ulEmpty" id="section-toc.1-1.20">
+          <li class="toc ulEmpty compact" id="section-toc.1-1.20">
             <p id="section-toc.1-1.20.1"><a href="#section-appendix.b" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.20.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -1265,196 +1295,209 @@ shared keys with costs that scale as the log of the group size.<a href="#section
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-change-log" class="section-name selfRef">Change Log</a>
         </h3>
 <p id="section-1.1-1">RFC EDITOR PLEASE DELETE THIS SECTION.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
-<p id="section-1.1-2">draft-10<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">draft-11<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-3.1">Allow new members to join via an external Commit (*)<a href="#section-1.1-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-3.1">Include subtree keys in parent hash (*)<a href="#section-1.1-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-3.2">Enable proposals to be sent inline in a Commit (*)<a href="#section-1.1-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.2">Pin HPKE to draft-07 (*)<a href="#section-1.1-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-3.3">Re-enable constant-time Add (*)<a href="#section-1.1-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.3">Move joiner secret to the end of the first key schedule epoch (*)<a href="#section-1.1-3.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-3.4">Change expiration extension to lifetime extension (*)<a href="#section-1.1-3.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.4">Add an AppAck proposal<a href="#section-1.1-3.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-3.5">Make the tree in the Welcome optional (*)<a href="#section-1.1-3.5" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.6">PSK injection, re-init, sub-group branching (*)<a href="#section-1.1-3.6" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.7">Require the initial init_secret to be a random value (*)<a href="#section-1.1-3.7" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.8">Remove explicit sender data nonce (*)<a href="#section-1.1-3.8" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.9">Do not encrypt to joiners in UpdatePath generation (*)<a href="#section-1.1-3.9" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.10">Move MLSPlaintext signature under the confirmation tag (*)<a href="#section-1.1-3.10" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.11">Explicitly authenticate group membership with MLSPLaintext (*)<a href="#section-1.1-3.11" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.12">Clarify X509Credential structure (*)<a href="#section-1.1-3.12" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.13">Remove uneeded interim transcript hash from GroupInfo (*)<a href="#section-1.1-3.13" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.14">IANA considerations<a href="#section-1.1-3.14" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.15">Derive an authentication secret<a href="#section-1.1-3.15" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.16">Use Extract/Expand from HPKE KDF<a href="#section-1.1-3.16" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-3.17">Clarify that application messages MUST be encrypted<a href="#section-1.1-3.17" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-3.5">Make initializations of transcript hashes consistent<a href="#section-1.1-3.5" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-4">draft-09<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">draft-10<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-5.1">Remove blanking of nodes on Add (*)<a href="#section-1.1-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-5.1">Allow new members to join via an external Commit (*)<a href="#section-1.1-5.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.2">Change epoch numbers to uint64 (*)<a href="#section-1.1-5.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.2">Enable proposals to be sent inline in a Commit (*)<a href="#section-1.1-5.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.3">Add PSK inputs (*)<a href="#section-1.1-5.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.3">Re-enable constant-time Add (*)<a href="#section-1.1-5.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.4">Add key schedule exporter (*)<a href="#section-1.1-5.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.4">Change expiration extension to lifetime extension (*)<a href="#section-1.1-5.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.5">Sign the updated direct path on Commit, using "parent hashes" and one
-signature per leaf (*)<a href="#section-1.1-5.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.5">Make the tree in the Welcome optional (*)<a href="#section-1.1-5.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.6">Use structured types for external senders (*)<a href="#section-1.1-5.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.6">PSK injection, re-init, sub-group branching (*)<a href="#section-1.1-5.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.7">Redesign Welcome to include confirmation and use derived keys (*)<a href="#section-1.1-5.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.7">Require the initial init_secret to be a random value (*)<a href="#section-1.1-5.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.8">Remove ignored proposals (*)<a href="#section-1.1-5.8" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.8">Remove explicit sender data nonce (*)<a href="#section-1.1-5.8" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.9">Always include an Update with a Commit (*)<a href="#section-1.1-5.9" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.9">Do not encrypt to joiners in UpdatePath generation (*)<a href="#section-1.1-5.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.10">Add per-message entropy to guard against nonce reuse (*)<a href="#section-1.1-5.10" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.10">Move MLSPlaintext signature under the confirmation tag (*)<a href="#section-1.1-5.10" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.11">Use the same hash ratchet construct for both application and handshake keys (*)<a href="#section-1.1-5.11" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.11">Explicitly authenticate group membership with MLSPLaintext (*)<a href="#section-1.1-5.11" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.12">Add more ciphersuites<a href="#section-1.1-5.12" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.12">Clarify X509Credential structure (*)<a href="#section-1.1-5.12" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.13">Use HKDF to derive key pairs (*)<a href="#section-1.1-5.13" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.13">Remove uneeded interim transcript hash from GroupInfo (*)<a href="#section-1.1-5.13" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.14">Mandate expiration of ClientInitKeys (*)<a href="#section-1.1-5.14" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.14">IANA considerations<a href="#section-1.1-5.14" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.15">Add extensions to GroupContext and flesh out the extensibility story (*)<a href="#section-1.1-5.15" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.15">Derive an authentication secret<a href="#section-1.1-5.15" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-5.16">Rename ClientInitKey to KeyPackage<a href="#section-1.1-5.16" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-5.16">Use Extract/Expand from HPKE KDF<a href="#section-1.1-5.16" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-5.17">Clarify that application messages MUST be encrypted<a href="#section-1.1-5.17" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-6">draft-08<a href="#section-1.1-6" class="pilcrow">¶</a></p>
+<p id="section-1.1-6">draft-09<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-7.1">Change ClientInitKeys so that they only refer to one ciphersuite (*)<a href="#section-1.1-7.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-7.1">Remove blanking of nodes on Add (*)<a href="#section-1.1-7.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-7.2">Decompose group operations into Proposals and Commits (*)<a href="#section-1.1-7.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-7.2">Change epoch numbers to uint64 (*)<a href="#section-1.1-7.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-7.3">Enable Add and Remove proposals from outside the group (*)<a href="#section-1.1-7.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-7.3">Add PSK inputs (*)<a href="#section-1.1-7.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-7.4">Replace Init messages with multi-recipient Welcome message (*)<a href="#section-1.1-7.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-7.4">Add key schedule exporter (*)<a href="#section-1.1-7.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-7.5">Add extensions to ClientInitKeys for expiration and downgrade resistance (*)<a href="#section-1.1-7.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-7.5">Sign the updated direct path on Commit, using "parent hashes" and one
+signature per leaf (*)<a href="#section-1.1-7.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-7.6">Allow multiple Proposals and a single Commit in one MLSPlaintext (*)<a href="#section-1.1-7.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-7.6">Use structured types for external senders (*)<a href="#section-1.1-7.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.7">Redesign Welcome to include confirmation and use derived keys (*)<a href="#section-1.1-7.7" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.8">Remove ignored proposals (*)<a href="#section-1.1-7.8" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.9">Always include an Update with a Commit (*)<a href="#section-1.1-7.9" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.10">Add per-message entropy to guard against nonce reuse (*)<a href="#section-1.1-7.10" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.11">Use the same hash ratchet construct for both application and handshake keys (*)<a href="#section-1.1-7.11" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.12">Add more ciphersuites<a href="#section-1.1-7.12" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.13">Use HKDF to derive key pairs (*)<a href="#section-1.1-7.13" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.14">Mandate expiration of ClientInitKeys (*)<a href="#section-1.1-7.14" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.15">Add extensions to GroupContext and flesh out the extensibility story (*)<a href="#section-1.1-7.15" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-7.16">Rename ClientInitKey to KeyPackage<a href="#section-1.1-7.16" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-8">draft-07<a href="#section-1.1-8" class="pilcrow">¶</a></p>
+<p id="section-1.1-8">draft-08<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-9.1">Initial version of the Tree based Application Key Schedule (*)<a href="#section-1.1-9.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-9.1">Change ClientInitKeys so that they only refer to one ciphersuite (*)<a href="#section-1.1-9.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-9.2">Initial definition of the Init message for group creation (*)<a href="#section-1.1-9.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-9.2">Decompose group operations into Proposals and Commits (*)<a href="#section-1.1-9.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-9.3">Fix issue with the transcript used for newcomers (*)<a href="#section-1.1-9.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-9.3">Enable Add and Remove proposals from outside the group (*)<a href="#section-1.1-9.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-9.4">Clarifications on message framing and HPKE contexts (*)<a href="#section-1.1-9.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-9.4">Replace Init messages with multi-recipient Welcome message (*)<a href="#section-1.1-9.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-9.5">Add extensions to ClientInitKeys for expiration and downgrade resistance (*)<a href="#section-1.1-9.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-9.6">Allow multiple Proposals and a single Commit in one MLSPlaintext (*)<a href="#section-1.1-9.6" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-10">draft-06<a href="#section-1.1-10" class="pilcrow">¶</a></p>
+<p id="section-1.1-10">draft-07<a href="#section-1.1-10" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-11.1">Reorder blanking and update in the Remove operation (*)<a href="#section-1.1-11.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-11.1">Initial version of the Tree based Application Key Schedule (*)<a href="#section-1.1-11.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-11.2">Rename the GroupState structure to GroupContext (*)<a href="#section-1.1-11.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-11.2">Initial definition of the Init message for group creation (*)<a href="#section-1.1-11.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-11.3">Rename UserInitKey to ClientInitKey<a href="#section-1.1-11.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-11.3">Fix issue with the transcript used for newcomers (*)<a href="#section-1.1-11.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-11.4">Resolve the circular dependency that draft-05 introduced in the
-confirmation MAC calculation (*)<a href="#section-1.1-11.4" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-11.5">Cover the entire MLSPlaintext in the transcript hash (*)<a href="#section-1.1-11.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-11.4">Clarifications on message framing and HPKE contexts (*)<a href="#section-1.1-11.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-12">draft-05<a href="#section-1.1-12" class="pilcrow">¶</a></p>
+<p id="section-1.1-12">draft-06<a href="#section-1.1-12" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-13.1">Common framing for handshake and application messages (*)<a href="#section-1.1-13.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-13.1">Reorder blanking and update in the Remove operation (*)<a href="#section-1.1-13.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-13.2">Handshake message encryption (*)<a href="#section-1.1-13.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-13.2">Rename the GroupState structure to GroupContext (*)<a href="#section-1.1-13.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-13.3">Convert from literal state to a commitment via the "tree hash" (*)<a href="#section-1.1-13.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-13.3">Rename UserInitKey to ClientInitKey<a href="#section-1.1-13.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-13.4">Add credentials to the tree and remove the "roster" concept (*)<a href="#section-1.1-13.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-13.4">Resolve the circular dependency that draft-05 introduced in the
+confirmation MAC calculation (*)<a href="#section-1.1-13.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-13.5">Remove the secret field from tree node values<a href="#section-1.1-13.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-13.5">Cover the entire MLSPlaintext in the transcript hash (*)<a href="#section-1.1-13.5" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-14">draft-04<a href="#section-1.1-14" class="pilcrow">¶</a></p>
+<p id="section-1.1-14">draft-05<a href="#section-1.1-14" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-15.1">Updating the language to be similar to the Architecture document<a href="#section-1.1-15.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-15.1">Common framing for handshake and application messages (*)<a href="#section-1.1-15.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-15.2">ECIES is now renamed in favor of HPKE (*)<a href="#section-1.1-15.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-15.2">Handshake message encryption (*)<a href="#section-1.1-15.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-15.3">Using a KDF instead of a Hash in TreeKEM (*)<a href="#section-1.1-15.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-15.3">Convert from literal state to a commitment via the "tree hash" (*)<a href="#section-1.1-15.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-15.4">Add credentials to the tree and remove the "roster" concept (*)<a href="#section-1.1-15.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-15.5">Remove the secret field from tree node values<a href="#section-1.1-15.5" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-16">draft-03<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-16">draft-04<a href="#section-1.1-16" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-17.1">Added ciphersuites and signature schemes (*)<a href="#section-1.1-17.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-17.1">Updating the language to be similar to the Architecture document<a href="#section-1.1-17.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-17.2">Re-ordered fields in UserInitKey to make parsing easier (*)<a href="#section-1.1-17.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-17.2">ECIES is now renamed in favor of HPKE (*)<a href="#section-1.1-17.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-17.3">Fixed inconsistencies between Welcome and GroupState (*)<a href="#section-1.1-17.3" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-1.1-17.4">Added encryption of the Welcome message (*)<a href="#section-1.1-17.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-17.3">Using a KDF instead of a Hash in TreeKEM (*)<a href="#section-1.1-17.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-18">draft-02<a href="#section-1.1-18" class="pilcrow">¶</a></p>
+<p id="section-1.1-18">draft-03<a href="#section-1.1-18" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-19.1">Removed ART (*)<a href="#section-1.1-19.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-19.1">Added ciphersuites and signature schemes (*)<a href="#section-1.1-19.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-19.2">Allowed partial trees to avoid double-joins (*)<a href="#section-1.1-19.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-19.2">Re-ordered fields in UserInitKey to make parsing easier (*)<a href="#section-1.1-19.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-19.3">Added explicit key confirmation (*)<a href="#section-1.1-19.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-19.3">Fixed inconsistencies between Welcome and GroupState (*)<a href="#section-1.1-19.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-19.4">Added encryption of the Welcome message (*)<a href="#section-1.1-19.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-20">draft-01<a href="#section-1.1-20" class="pilcrow">¶</a></p>
+<p id="section-1.1-20">draft-02<a href="#section-1.1-20" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-21.1">Initial description of the Message Protection mechanism. (*)<a href="#section-1.1-21.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-21.1">Removed ART (*)<a href="#section-1.1-21.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.2">Initial specification proposal for the Application Key Schedule
-using the per-participant chaining of the Application Secret design. (*)<a href="#section-1.1-21.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-21.2">Allowed partial trees to avoid double-joins (*)<a href="#section-1.1-21.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.3">Initial specification proposal for an encryption mechanism to protect
-Application Messages using an AEAD scheme. (*)<a href="#section-1.1-21.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-21.3">Added explicit key confirmation (*)<a href="#section-1.1-21.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.4">Initial specification proposal for an authentication mechanism
-of Application Messages using signatures. (*)<a href="#section-1.1-21.4" class="pilcrow">¶</a>
+        </ul>
+<p id="section-1.1-22">draft-01<a href="#section-1.1-22" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-23.1">Initial description of the Message Protection mechanism. (*)<a href="#section-1.1-23.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.5">Initial specification proposal for a padding mechanism to improving
-protection of Application Messages against traffic analysis. (*)<a href="#section-1.1-21.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-23.2">Initial specification proposal for the Application Key Schedule
+using the per-participant chaining of the Application Secret design. (*)<a href="#section-1.1-23.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.6">Inversion of the Group Init Add and Application Secret derivations
+          <li class="normal" id="section-1.1-23.3">Initial specification proposal for an encryption mechanism to protect
+Application Messages using an AEAD scheme. (*)<a href="#section-1.1-23.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-23.4">Initial specification proposal for an authentication mechanism
+of Application Messages using signatures. (*)<a href="#section-1.1-23.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-23.5">Initial specification proposal for a padding mechanism to improving
+protection of Application Messages against traffic analysis. (*)<a href="#section-1.1-23.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-23.6">Inversion of the Group Init Add and Application Secret derivations
 in the Handshake Key Schedule to be ease chaining in case we switch
-design. (*)<a href="#section-1.1-21.6" class="pilcrow">¶</a>
+design. (*)<a href="#section-1.1-23.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.7">Removal of the UserAdd construct and split of GroupAdd into Add
-and Welcome messages (*)<a href="#section-1.1-21.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-23.7">Removal of the UserAdd construct and split of GroupAdd into Add
+and Welcome messages (*)<a href="#section-1.1-23.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.8">Initial proposal for authenticating handshake messages by signing
-over group state and including group state in the key schedule (*)<a href="#section-1.1-21.8" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-23.8">Initial proposal for authenticating handshake messages by signing
+over group state and including group state in the key schedule (*)<a href="#section-1.1-23.8" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.9">Added an appendix with example code for tree math<a href="#section-1.1-21.9" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-23.9">Added an appendix with example code for tree math<a href="#section-1.1-23.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-21.10">Changed the ECIES mechanism used by TreeKEM so that it uses nonces
-generated from the shared secret<a href="#section-1.1-21.10" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-23.10">Changed the ECIES mechanism used by TreeKEM so that it uses nonces
+generated from the shared secret<a href="#section-1.1-23.10" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-1.1-22">draft-00<a href="#section-1.1-22" class="pilcrow">¶</a></p>
+<p id="section-1.1-24">draft-00<a href="#section-1.1-24" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-23.1">Initial adoption of draft-barnes-mls-protocol-01 as a WG item.<a href="#section-1.1-23.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-25.1">Initial adoption of draft-barnes-mls-protocol-01 as a WG item.<a href="#section-1.1-25.1" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -1472,40 +1515,46 @@ generated from the shared secret<a href="#section-1.1-21.10" class="pilcrow">¶<
 BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they appear in all
 capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2-2">
-        <dt id="section-2-2.1">Client:</dt>
+        <dt id="section-2-2.1">
+Client:  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.2">
-  An agent that uses this protocol to establish shared cryptographic
+          <p id="section-2-2.2.1">An agent that uses this protocol to establish shared cryptographic
 state with other clients.  A client is defined by the
-cryptographic keys it holds.<a href="#section-2-2.2" class="pilcrow">¶</a>
+cryptographic keys it holds.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.3">Group:</dt>
+<dt id="section-2-2.3">
+Group:  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.4">
-  A collection of clients with shared cryptographic state.<a href="#section-2-2.4" class="pilcrow">¶</a>
+          <p id="section-2-2.4.1">A collection of clients with shared cryptographic state.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.5">Member:</dt>
+<dt id="section-2-2.5">
+Member:  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.6">
-  A client that is included in the shared state of a group, hence
-has access to the group's secrets.<a href="#section-2-2.6" class="pilcrow">¶</a>
+          <p id="section-2-2.6.1">A client that is included in the shared state of a group, hence
+has access to the group's secrets.<a href="#section-2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.7">Key Package:</dt>
+<dt id="section-2-2.7">
+Key Package:  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.8">
-  A signed object describing a client's identity and capabilities, and including
-a hybrid public-key encryption (HPKE <span>[<a href="#I-D.irtf-cfrg-hpke" class="xref">I-D.irtf-cfrg-hpke</a>]</span> ) public key that
-can be used to encrypt to that client.<a href="#section-2-2.8" class="pilcrow">¶</a>
+          <p id="section-2-2.8.1">A signed object describing a client's identity and capabilities, and including
+a hybrid public-key encryption (HPKE <span>[<a href="#I-D.irtf-cfrg-hpke" class="xref">I-D.irtf-cfrg-hpke</a>]</span>) public key that
+can be used to encrypt to that client.<a href="#section-2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.9">Initialization Key (InitKey):</dt>
+<dt id="section-2-2.9">
+Initialization Key (InitKey):  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.10">
-  A key package that is prepublished by a client, which other clients can use to
-introduce the client to a new group.<a href="#section-2-2.10" class="pilcrow">¶</a>
+          <p id="section-2-2.10.1">A key package that is prepublished by a client, which other clients can use to
+introduce the client to a new group.<a href="#section-2-2.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.11">Signature Key:</dt>
+<dt id="section-2-2.11">
+Signature Key:  </dt>
         <dd style="margin-left: 1.5em" id="section-2-2.12">
-  A signing key pair used to authenticate the sender of a message.<a href="#section-2-2.12" class="pilcrow">¶</a>
+          <p id="section-2-2.12.1">A signing key pair used to authenticate the sender of a message.<a href="#section-2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1603,9 +1652,9 @@ broadcasts them to the group. It also generates a Welcome message and sends this
 directly to the new member (there's no need to send it to the group). Only after
 A has received its Commit message back from the server does it update its state
 to reflect the new member's addition.<a href="#section-4-9" class="pilcrow">¶</a></p>
-<p id="section-4-10">Upon receiving the Welcome message and the corresponding Commit, the new member
-will be able to read and send new messages to the group. Messages received
-before the client has joined the group are ignored.<a href="#section-4-10" class="pilcrow">¶</a></p>
+<p id="section-4-10">Upon receiving the Welcome message, the new member will be able to read and send 
+new messages to the group. Messages received before the client has joined the 
+group are ignored.<a href="#section-4-10" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-4-11">
 <pre>
                                                                Group
@@ -1620,34 +1669,34 @@ A              B              C          Directory            Channel
 |---------------------------------------------------------------&gt;|
 |              |              |              |                   |
 |  Welcome(B)  |              |              |                   |
-|-------------&gt;|state.init()  |              |                   |
+|-------------&gt;|state.join()  |              |                   |
 |              |              |              |                   |
 |              |              |              | Add(A-&gt;AB)        |
 |              |              |              | Commit(Add)       |
 |&lt;---------------------------------------------------------------|
-|state.add(B)  |&lt;------------------------------------------------|
-|              |state.join()  |              |                   |
+|state.add(B)  |              |              |                   |
+|              |              |              |                   |
 |              |              |              |                   |
 |              |              |              | Add(AB-&gt;ABC)      |
 |              |              |              | Commit(Add)       |
 |---------------------------------------------------------------&gt;|
 |              |              |              |                   |
 |              |  Welcome(C)  |              |                   |
-|----------------------------&gt;|state.init()  |                   |
+|----------------------------&gt;|state.join()  |                   |
 |              |              |              |                   |
 |              |              |              | Add(AB-&gt;ABC)      |
 |              |              |              | Commit(Add)       |
 |&lt;---------------------------------------------------------------|
 |state.add(C)  |&lt;------------------------------------------------|
-|              |state.add(C)  |&lt;---------------------------------|
-|              |              |state.join()  |                   |
+|              |state.add(C)  |              |                   |
+|              |              |              |                   |
 </pre><a href="#section-4-11" class="pilcrow">¶</a>
 </div>
 <p id="section-4-12">Subsequent additions of group members proceed in the same way.  Any
 member of the group can download a KeyPackage for a new client
 and broadcast an Add message that the current group can use to update
 their state, and a Welcome message that the new client can use to
-initialize its state.<a href="#section-4-12" class="pilcrow">¶</a></p>
+initialize its state and join the group.<a href="#section-4-12" class="pilcrow">¶</a></p>
 <p id="section-4-13">To enforce the forward secrecy and post-compromise security of messages,
 each member periodically updates their leaf secret.
 Any member can update this information at any time by generating a fresh
@@ -1829,7 +1878,7 @@ node index.  The leaf indices in the above tree are as follows:<a href="#section
         </ul>
 </section>
 </div>
-<div id="ratchet-tree-nodes">
+<div id="resolution-example">
 <section id="section-5.2">
         <h3 id="name-ratchet-tree-nodes">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-ratchet-tree-nodes" class="section-name selfRef">Ratchet Tree Nodes</a>
@@ -1856,7 +1905,8 @@ creates a key pair for the KEM from a symmetric secret<a href="#section-5.2-2.1"
 </li>
           <li class="normal" id="section-5.2-4.4">A credential (only for leaf nodes)<a href="#section-5.2-4.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.2-4.5">A hash of the node's parent, as of the last time the node was changed.<a href="#section-5.2-4.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.2-4.5">A hash of certain information about the node's parent, as of the last time the
+node was changed (see <a href="#parent-hash" class="xref">Section 7.4</a>).<a href="#section-5.2-4.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-5.2-5">The conditions under which each of these values must or must not be
@@ -2030,15 +2080,15 @@ local tree state as described in the prior section, the generator must broadcast
 this update to other members of the group in a Commit message, who
 apply it to keep their local views of the tree in
 sync with the sender's.  More specifically, when a member commits a change to
-the tree (e.g., to add or remove a member), it transmits an UpdatePath message
-containing a set of public and encrypted private
-values for intermediate nodes in the direct path of a leaf. The
+the tree (e.g., to add or remove a member), it transmits an UpdatePath
+containing a set of public keys and encrypted private
+keys for intermediate nodes in the direct path of its leaf. The
 other members of the group use these values to update
 their view of the tree, aligning their copy of the tree to the
 sender's.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.5-2">To transmit this update, the sender broadcasts to the group
+<p id="section-5.5-2">An UpdatePath contains
 the following information for each node in the direct path of the
-leaf, including the root:<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+sender's leaf, including the root:<a href="#section-5.5-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5-3.1">The public key for the node<a href="#section-5.5-3.1" class="pilcrow">¶</a>
 </li>
@@ -2048,10 +2098,10 @@ the node<a href="#section-5.5-3.2" class="pilcrow">¶</a>
         </ul>
 <p id="section-5.5-4">The path secret value for a given node is encrypted for the subtree
 corresponding to the parent's non-updated child, that is, the child
-on the copath of the leaf node.
-There is one encrypted path secret for each public key in the resolution
+on the copath of the sender's leaf node.
+There is one encryption of the path secret to each public key in the resolution
 of the non-updated child.<a href="#section-5.5-4" class="pilcrow">¶</a></p>
-<p id="section-5.5-5">The recipient of a path update processes it with the following steps:<a href="#section-5.5-5" class="pilcrow">¶</a></p>
+<p id="section-5.5-5">The recipient of an UpdatePath processes it with the following steps:<a href="#section-5.5-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.5-6">
 <li id="section-5.5-6.1">
             <p id="section-5.5-6.1.1">Compute the updated path secrets.<a href="#section-5.5-6.1.1" class="pilcrow">¶</a></p>
@@ -2165,9 +2215,9 @@ following primitives to be used in group key computations:<a href="#section-6.1-
           <li class="normal" id="section-6.1-2.3">A signature algorithm<a href="#section-6.1-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-6.1-3">The HPKE parameters are used to instantiate HPKE <span>[<a href="#I-D.irtf-cfrg-hpke" class="xref">I-D.irtf-cfrg-hpke</a>]</span> for the
-purpose of public-key encryption.  The <code>DeriveKeyPair</code> function associated to
-the KEM for the ciphersuite maps octet strings to HPKE key pairs.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">MLS uses draft-07 of HPKE <span>[<a href="#I-D.irtf-cfrg-hpke" class="xref">I-D.irtf-cfrg-hpke</a>]</span> for public-key encryption.
+The <code>DeriveKeyPair</code> function associated to the KEM for the ciphersuite maps
+octet strings to HPKE key pairs.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4">Ciphersuites are represented with the CipherSuite type. HPKE public keys
 are opaque values in a format defined by the underlying
 protocol (see the Cryptographic Dependencies section of the HPKE specification for more
@@ -2386,27 +2436,85 @@ opaque key_id&lt;0..2^16-1&gt;;
         <h3 id="name-parent-hash">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-parent-hash" class="section-name selfRef">Parent Hash</a>
         </h3>
-<p id="section-7.4-1">The <code>parent_hash</code> extension serves to bind a KeyPackage to all the nodes
-above it in the group's ratchet tree. This enforces the tree invariant, meaning
-that malicious members can't lie about the state of the ratchet tree when they
-send Welcome messages to new members.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">Consider a ratchet tree with a parent node P and children V and S. The parent hash
+of P changes whenever an <code>UpdatePath</code> object is applied to the ratchet tree along
+a path traversing node V (and hence also P). The new "Parent Hash of P (with Co-Path
+Child S)" is obtained by hashing P's <code>ParentHashInput</code> struct using the resolution
+of S to populate the <code>original_child_resolution</code> field. This way, P's Parent Hash
+fixes the new HPKE public keys of all nodes on the path from P to the root.
+Furthermore, for each such key PK the hash also binds the set of HPKE public keys
+to which PK's secret key was encrypted in the commit packet that anounced the
+<code>UpdatePath</code> object.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.4-2">
-<pre>
-opaque parent_hash&lt;0..255&gt;;
-</pre><a href="#section-7.4-2" class="pilcrow">¶</a>
-</div>
-<p id="section-7.4-3">This extension MUST be present in all Updates that are sent as part of a Commit
-message. If the extension is present, clients MUST verify that <code>parent_hash</code>
-matches the hash of the leaf's parent node when represented as a ParentNode
-struct.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.4-4">
 <pre>
 struct {
     HPKEPublicKey public_key;
-    uint32 unmerged_leaves&lt;0..2^32-1&gt;;
     opaque parent_hash&lt;0..255&gt;;
-} ParentNode;
-</pre><a href="#section-7.4-4" class="pilcrow">¶</a>
+    HPKEPublicKey original_child_resolution&lt;0..2^32-1&gt;;
+} ParentHashInput;
+</pre><a href="#section-7.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.4-3">The Parent Hash of P with Co-Path Child S is the hash of a <code>ParentHashInput</code> object
+populated as follows. The field <code>public_key</code> contains the HPKE public key of P. If P
+is the root, then <code>parent_hash</code> is set to a zero-length octet string.
+Otherwise <code>parent_hash</code> is the Parent Hash of P's parent with P's sibling as the
+co-path child.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.4-4">Finally, <code>original_child_resolution</code> is the array of <code>HPKEPublicKey</code> values of the
+nodes in the resolution of S but with the <code>unmerged_leaves</code> of P omitted. For
+example, in the ratchet tree depicted in <a href="#resolution-example" class="xref">Section 5.2</a> the
+<code>ParentHashInput</code> of node 5 with co-path child 4 would contain an empty
+<code>original_child_resolution</code> since 4's resolution includes only itself but 4 is also
+an unmerged leaf of 5. Meanwhile, the <code>ParentHashInput</code> of node 5 with co-path child
+6 has an array with one element in it: the HPKE public key of 6.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
+<div id="using-parent-hashes">
+<section id="section-7.4.1">
+          <h4 id="name-using-parent-hashes">
+<a href="#section-7.4.1" class="section-number selfRef">7.4.1. </a><a href="#name-using-parent-hashes" class="section-name selfRef">Using Parent Hashes</a>
+          </h4>
+<p id="section-7.4.1-1">The Parent Hash of P appears in three types of structs. If V is itself a parent node
+then P's Parent Hash is stored in the <code>parent_hash</code> fields of both V's
+<code>ParentHashInput</code> struct and V's <code>ParentNode</code> struct. (The <code>ParentNode</code> struct is
+used to encapsulate all public information about V that must be conveyed to a new
+member joining the group as well as to define the Tree Hash of node V.)<a href="#section-7.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.4.1-2">If, on the other hand, V is a leaf and its KeyPackage contains the <code>parent_hash</code>
+extension then the Parent Hash of P (with V's sibling as co-path child) is stored in
+that field. In particular, the extension MUST be present in the <code>leaf_key_package</code>
+field of an <code>UpdatePath</code> object. (This way, the signature of such a KeyPackage also
+serves to attest to which keys the group member introduced into the ratchet tree and
+to whom the corresponding secret keys were sent. This helps prevent malicious insiders
+from constructing artificial ratchet trees with a node V whose HPKE secret key is
+known to the insider yet where the insider isn't assigned a leaf in the subtree rooted
+at V. Indeed, such a ratchet tree would violate the tree invariant.)<a href="#section-7.4.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="verifying-parent-hashes">
+<section id="section-7.4.2">
+          <h4 id="name-verifying-parent-hashes">
+<a href="#section-7.4.2" class="section-number selfRef">7.4.2. </a><a href="#name-verifying-parent-hashes" class="section-name selfRef">Verifying Parent Hashes</a>
+          </h4>
+<p id="section-7.4.2-1">To this end, when processing a Commit message clients MUST recompute the
+expected value of <code>parent_hash</code> for the committer's new leaf and verify that it
+matches the <code>parent_hash</code> value in the supplied <code>leaf_key_package</code>. Moreover, when
+joining a group, new members MUST authenticate each non-blank parent node P. A parent
+node P is authenticated by performing the following check:<a href="#section-7.4.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4.2-2.1">Let L and R be the left and right children of P, respectively<a href="#section-7.4.2-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.4.2-2.2">If L.parent_hash is equal to the Parent Hash of P with Co-Path Child R, the check passes<a href="#section-7.4.2-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.4.2-2.3">If R is blank, replace R with its left child until R is either non-blank or a leaf node<a href="#section-7.4.2-2.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.4.2-2.4">If R is a leaf node, the check fails<a href="#section-7.4.2-2.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.4.2-2.5">If R.parent_hash is equal to the Parent Hash of P with Co-Path Child L, the check passes<a href="#section-7.4.2-2.5" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.4.2-2.6">Otherwise, the check fails<a href="#section-7.4.2-2.6" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-7.4.2-3">The left-child recursion under the right child of P is necessary because the expansion of
+the tree to the right due to Add proposals can cause blank nodes to be interposed
+between a parent node and its right child.<a href="#section-7.4.2-3" class="pilcrow">¶</a></p>
+</section>
 </div>
 </section>
 </div>
@@ -2415,16 +2523,14 @@ struct {
         <h3 id="name-tree-hashes">
 <a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-tree-hashes" class="section-name selfRef">Tree Hashes</a>
         </h3>
-<p id="section-7.5-1">To allow group members to verify that they agree on the public
-cryptographic state of the group, this section defines a scheme for
-generating a hash value that represents the contents of the group's
-ratchet tree and the members' KeyPackages.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
-<p id="section-7.5-2">The hash of a tree is the hash of its root node, which we define
-recursively, starting with the leaves.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
-<p id="section-7.5-3">Elements of the ratchet tree are called <code>Node</code> objects and
-the leaves contain an optional <code>KeyPackage</code>, while the parents contain
-an optional <code>ParentNode</code>.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.5-4">
+<p id="section-7.5-1">To allow group members to verify that they agree on the public cryptographic state
+of the group, this section defines a scheme for generating a hash value (called
+the "tree hash") that represents the contents of the group's ratchet tree and the
+members' KeyPackages. The tree hash of a tree is the tree hash of its root node,
+which we define recursively, starting with the leaves.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+<p id="section-7.5-2">As some nodes may be blank while others contain data we use the following struct
+to include data if present.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-7.5-3">
 <pre>
 struct {
     uint8 present;
@@ -2433,33 +2539,41 @@ struct {
         case 1: T value;
     }
 } optional&lt;T&gt;;
-</pre><a href="#section-7.5-4" class="pilcrow">¶</a>
+</pre><a href="#section-7.5-3" class="pilcrow">¶</a>
 </div>
-<p id="section-7.5-5">When computing the hash of a parent node, the <code>ParentNodeHashInput</code>
-structure is used:<a href="#section-7.5-5" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.5-6">
-<pre>
-struct {
-    uint32 node_index;
-    optional&lt;ParentNode&gt; parent_node;
-    opaque left_hash&lt;0..255&gt;;
-    opaque right_hash&lt;0..255&gt;;
-} ParentNodeHashInput;
-</pre><a href="#section-7.5-6" class="pilcrow">¶</a>
-</div>
-<p id="section-7.5-7">The <code>left_hash</code> and <code>right_hash</code> fields hold the hashes of the node's
-left and right children, respectively. When computing the hash of
-a leaf node, the hash of a <code>LeafNodeHashInput</code> object is used:<a href="#section-7.5-7" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-7.5-8">
+<p id="section-7.5-4">The tree hash of a leaf node is the hash of leaf's <code>LeafNodeHashInput</code> object which
+might include a Key Package depending on whether or not it is blank.<a href="#section-7.5-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-7.5-5">
 <pre>
 struct {
     uint32 node_index;
     optional&lt;KeyPackage&gt; key_package;
 } LeafNodeHashInput;
+</pre><a href="#section-7.5-5" class="pilcrow">¶</a>
+</div>
+<p id="section-7.5-6">Note that the <code>node_index</code> field contains the index of the leaf among the nodes
+in the tree, not its index among the leaves; <code>node_index = 2 * leaf_index</code>.<a href="#section-7.5-6" class="pilcrow">¶</a></p>
+<p id="section-7.5-7">Now the tree hash of any non-leaf node is recursively defined to be the hash of
+its <code>ParentNodeTreeHashInput</code>. This includes an optional <code>ParentNode</code>
+object depending on if the node is blank or not.<a href="#section-7.5-7" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-7.5-8">
+<pre>
+struct {
+    HPKEPublicKey public_key;
+    opaque parent_hash&lt;0..255&gt;;
+    uint32 unmerged_leaves&lt;0..2^32-1&gt;;
+} ParentNode;
+
+struct {
+    uint32 node_index;
+    optional&lt;ParentNode&gt; parent_node;
+    opaque left_hash&lt;0..255&gt;;
+    opaque right_hash&lt;0..255&gt;;
+} ParentNodeTreeHashInput;
 </pre><a href="#section-7.5-8" class="pilcrow">¶</a>
 </div>
-<p id="section-7.5-9">Note that the <code>node_index</code> field contains the index of the leaf among the nodes
-in the tree, not its index among the leaves; <code>node_index = 2 * leaf_index</code>.<a href="#section-7.5-9" class="pilcrow">¶</a></p>
+<p id="section-7.5-9">The <code>left_hash</code> and <code>right_hash</code> fields hold the tree hashes of the node's
+left and right children, respectively.<a href="#section-7.5-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="group-state">
@@ -2654,15 +2768,18 @@ proceeds as shown in the following diagram:<a href="#section-8-7" class="pilcrow
                    init_secret_[n-1]
                          |
                          V
-    commit_secret -&gt; KDF.Extract = joiner_secret
+    commit_secret -&gt; KDF.Extract
                          |
                          V
-                   Derive-Secret(., "member")
+                   DeriveSecret(., "joiner")
                          |
                          V
-psk_secret (or 0) -&gt; KDF.Extract = member_secret
+                    joiner_secret
                          |
-                         +--&gt; Derive-Secret(., "welcome")
+                         V
+psk_secret (or 0) -&gt; KDF.Extract
+                         |
+                         +--&gt; DeriveSecret(., "welcome")
                          |    = welcome_secret
                          |
                          V
@@ -2671,11 +2788,11 @@ psk_secret (or 0) -&gt; KDF.Extract = member_secret
                          V
                     epoch_secret
                          |
-                         +--&gt; Derive-Secret(., &lt;label&gt;)
+                         +--&gt; DeriveSecret(., &lt;label&gt;)
                          |    = &lt;secret&gt;
                          |
                          V
-                   Derive-Secret(., "init")
+                   DeriveSecret(., "init")
                          |
                          V
                    init_secret_[n]
@@ -3009,9 +3126,8 @@ application message using the j-th key and nonce in the ratchet of node
 index N in some epoch n. Then, for that member, at least the following
 values have been consumed and MUST be deleted:<a href="#section-8.5-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.5-6.1">the <code>commit_secret</code>, <code>joiner_secret</code>, <code>member_secret</code>, <code>epoch_secret</code>,
-<code>encryption_secret</code> of that epoch n as well as the <code>init_secret</code> of the
-previous epoch n-1,<a href="#section-8.5-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.5-6.1">the <code>commit_secret</code>, <code>joiner_secret</code>, <code>epoch_secret</code>, <code>encryption_secret</code> of
+that epoch n as well as the <code>init_secret</code> of the previous epoch n-1,<a href="#section-8.5-6.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-8.5-6.2">all node secrets in the Secret Tree on the path from the root to the leaf with
 node index N,<a href="#section-8.5-6.2" class="pilcrow">¶</a>
@@ -3047,9 +3163,9 @@ participant D:<a href="#section-8.5-7" class="pilcrow">¶</a></p>
 <p id="section-8.5-9">Then if a client uses key K1 and nonce N1 during epoch n then it must consume
 (at least) values G, F, D, AR0, AR1, K1, N1 as well as the key schedule secrets
 used to derive G (the <code>encryption_secret</code>), namely <code>init_secret</code> of epoch n-1
-and <code>commit_secret</code>, <code>joiner_secret</code>, <code>member_secret</code>, <code>epoch_secret</code> of epoch
-n. The client MAY retain (not consume) the values K0 and N0 to allow for
-out-of-order delivery, and SHOULD retain AR2 for processing future messages.<a href="#section-8.5-9" class="pilcrow">¶</a></p>
+and <code>commit_secret</code>, <code>joiner_secret</code>, <code>epoch_secret</code> of epoch n. The client MAY
+retain (not consume) the values K0 and N0 to allow for out-of-order delivery,
+and SHOULD retain AR2 for processing future messages.<a href="#section-8.5-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exporters">
@@ -3190,7 +3306,7 @@ struct {
 </div>
 <p id="section-9-4">The field <code>confirmation_tag</code> MUST be present if <code>content_type</code> equals commit.
 Otherwise, it MUST NOT be present.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">External sender types are sent as MLSPlaintext, see <a href="#external-proposals" class="xref">Section 11.1.7</a>
+<p id="section-9-5">External sender types are sent as MLSPlaintext, see <a href="#external-proposals" class="xref">Section 11.1.8</a>
 for their use.<a href="#section-9-5" class="pilcrow">¶</a></p>
 <p id="section-9-6">The remainder of this section describes how to compute the signature of an
 MLSPlaintext object and how to convert it to an MLSCiphertext object for
@@ -3421,8 +3537,7 @@ in these KeyPackages to verify that the
 chosen version and ciphersuite is the best option supported by all members.<a href="#section-10-3.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-10-3.2">
-          <p id="section-10-3.2.1">Initialize a one-member group with the following initial values (where "0"
-represents an all-zero vector of size KDF.Nh):<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-10-3.2.1">Initialize a one-member group with the following initial values:<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-3.2.2.1">Ratchet tree: A tree with a single node, a leaf containing an HPKE public
 key and credential for the creator<a href="#section-10-3.2.2.1" class="pilcrow">¶</a>
@@ -3433,9 +3548,9 @@ key and credential for the creator<a href="#section-10-3.2.2.1" class="pilcrow">
 </li>
             <li class="normal" id="section-10-3.2.2.4">Tree hash: The root hash of the above ratchet tree<a href="#section-10-3.2.2.4" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-10-3.2.2.5">Confirmed transcript hash: 0<a href="#section-10-3.2.2.5" class="pilcrow">¶</a>
+            <li class="normal" id="section-10-3.2.2.5">Confirmed transcript hash: the zero-length octet string<a href="#section-10-3.2.2.5" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-10-3.2.2.6">Interim transcript hash: 0<a href="#section-10-3.2.2.6" class="pilcrow">¶</a>
+            <li class="normal" id="section-10-3.2.2.6">Interim transcript hash: the zero-length octet string<a href="#section-10-3.2.2.6" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-10-3.2.2.7">Init secret: a fresh random value of size <code>KDF.Nh</code><a href="#section-10-3.2.2.7" class="pilcrow">¶</a>
 </li>
@@ -3528,6 +3643,7 @@ enum {
     psk(4),
     reinit(5),
     external_init(6),
+    app_ack(7),
     (255)
 } ProposalType;
 
@@ -3540,6 +3656,7 @@ struct {
         case psk:           PreSharedKey;
         case reinit:        ReInit;
         case external_init: ExternalInit;
+        case app_ack:       AppAck;
     };
 } Proposal;
 </pre><a href="#section-11.1-2" class="pilcrow">¶</a>
@@ -3628,6 +3745,8 @@ struct {
 </li>
             <li class="normal" id="section-11.1.3-4.2">Blank the intermediate nodes along the path from the removed leaf to the root<a href="#section-11.1.3-4.2" class="pilcrow">¶</a>
 </li>
+            <li class="normal" id="section-11.1.3-4.3">Truncate the tree by reducing the size of tree until the rightmost non-blank leaf node<a href="#section-11.1.3-4.3" class="pilcrow">¶</a>
+</li>
           </ul>
 </section>
 </div>
@@ -3705,35 +3824,94 @@ epoch using an init secret computed as described in <a href="#external-initializ
 The <code>kem_output</code> field contains the required KEM output.<a href="#section-11.1.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="external-proposals">
+<div id="appack">
 <section id="section-11.1.7">
-          <h4 id="name-external-proposals">
-<a href="#section-11.1.7" class="section-number selfRef">11.1.7. </a><a href="#name-external-proposals" class="section-name selfRef">External Proposals</a>
+          <h4 id="name-appack">
+<a href="#section-11.1.7" class="section-number selfRef">11.1.7. </a><a href="#name-appack" class="section-name selfRef">AppAck</a>
           </h4>
-<p id="section-11.1.7-1">Add and Remove proposals can be constructed and sent to the group by a party
+<p id="section-11.1.7-1">An AppAck proposal is used to acknowledge receipt of application messages.
+Though this information implies no change to the group, it is structured as a
+Proposal message so that it is included in the group's transcript by being
+included in Commit messages.<a href="#section-11.1.7-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-11.1.7-2">
+<pre>
+struct {
+    uint32 sender;
+    uint32 first_generation;
+    uint32 last_generation;
+} MessageRange;
+
+struct {
+    MessageRange received_ranges&lt;0..2^32-1&gt;;
+} AppAck;
+</pre><a href="#section-11.1.7-2" class="pilcrow">¶</a>
+</div>
+<p id="section-11.1.7-3">An AppAck proposal represents a set of messages received by the sender in the
+current epoch.  Messages are represented by the <code>sender</code> and <code>generation</code> values
+in the MLSCiphertext for the message.  Each MessageRange represents receipt of a
+span of messages whose <code>generation</code> values form a continuous range from
+<code>first_generation</code> to <code>last_generation</code>, inclusive.<a href="#section-11.1.7-3" class="pilcrow">¶</a></p>
+<p id="section-11.1.7-4">AppAck proposals are sent as a guard against the Delivery Service dropping
+application messages.  The sequential nature of the <code>generation</code> field provides
+a degree of loss detection, since gaps in the <code>generation</code> sequence indicate
+dropped messages.  AppAck completes this story by addressing the scenario where
+the Delivery Service drops all messages after a certain point, so that a later
+generation is never observed.  Obviously, there is a risk that AppAck messages
+could be suppressed as well, but their inclusion in the transcript means that if
+they are suppressed then the group cannot advance at all.<a href="#section-11.1.7-4" class="pilcrow">¶</a></p>
+<p id="section-11.1.7-5">The schedule on which sending AppAck proposals are sent is up to the application,
+and determines which cases of loss/suppression are detected.  For example:<a href="#section-11.1.7-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11.1.7-6.1">The application might have the committer include an AppAck proposal whenever a
+Commit is sent, so that other members could know when one of their messages
+did not reach the committer.<a href="#section-11.1.7-6.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-11.1.7-6.2">The application could have a client send an AppAck whenever an application
+message is sent, covering all messages received since its last AppAck.  This
+would provide a complete view of any losses experienced by active members.<a href="#section-11.1.7-6.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-11.1.7-6.3">The application could simply have clients send AppAck proposals on a timer, so
+that all participants' state would be known.<a href="#section-11.1.7-6.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-11.1.7-7">An application using AppAck proposals to guard against loss/suppression of
+application messages also needs to ensure that AppAck messages and the Commits
+that reference them are not dropped.  One way to do this is to always encrypt
+Proposal and Commit messages, to make it more difficult for the Delivery Service
+to recognize which messages conatain AppAcks.  The application can also have
+clients enforce an AppAck schedule, reporting loss if an AppAck is not received
+at the expected time.<a href="#section-11.1.7-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="external-proposals">
+<section id="section-11.1.8">
+          <h4 id="name-external-proposals">
+<a href="#section-11.1.8" class="section-number selfRef">11.1.8. </a><a href="#name-external-proposals" class="section-name selfRef">External Proposals</a>
+          </h4>
+<p id="section-11.1.8-1">Add and Remove proposals can be constructed and sent to the group by a party
 that is outside the group.  For example, a Delivery Service might propose to
 remove a member of a group who has been inactive for a long time, or propose adding
 a newly-hired staff member to a group representing a real-world team.  Proposals
 originating outside the group are identified by a <code>preconfigured</code> or
-<code>new_member</code> SenderType in MLSPlaintext.<a href="#section-11.1.7-1" class="pilcrow">¶</a></p>
-<p id="section-11.1.7-2">ReInit proposals can also be sent to the group by a <code>preconfigured</code> sender, for
-example to enforce a changed policy regarding MLS version or ciphersuite.<a href="#section-11.1.7-2" class="pilcrow">¶</a></p>
-<p id="section-11.1.7-3">The <code>new_member</code> SenderType is used for clients proposing that they themselves
+<code>new_member</code> SenderType in MLSPlaintext.<a href="#section-11.1.8-1" class="pilcrow">¶</a></p>
+<p id="section-11.1.8-2">ReInit proposals can also be sent to the group by a <code>preconfigured</code> sender, for
+example to enforce a changed policy regarding MLS version or ciphersuite.<a href="#section-11.1.8-2" class="pilcrow">¶</a></p>
+<p id="section-11.1.8-3">The <code>new_member</code> SenderType is used for clients proposing that they themselves
 be added.  For this ID type the sender value MUST be zero and the Proposal type
 MUST be Add. The MLSPlaintext MUST be signed with the private key corresponding
 to the KeyPackage in the Add message.  Recipients MUST verify that the
-MLSPlaintext carrying the Proposal message is validly signed with this key.<a href="#section-11.1.7-3" class="pilcrow">¶</a></p>
-<p id="section-11.1.7-4">The <code>preconfigured</code> SenderType is reserved for signers that are pre-provisioned
+MLSPlaintext carrying the Proposal message is validly signed with this key.<a href="#section-11.1.8-3" class="pilcrow">¶</a></p>
+<p id="section-11.1.8-4">The <code>preconfigured</code> SenderType is reserved for signers that are pre-provisioned
 to the clients within a group.  If proposals with these sender IDs are to be
 accepted within a group, the members of the group MUST be provisioned by the
 application with a mapping between these IDs and authorized signing keys.
 Recipients MUST verify that the MLSPlaintext carrying the Proposal message is
 validly signed with the corresponding key. To ensure consistent handling of
 external proposals, the application MUST ensure that the members of a group
-have the same mapping and apply the same policies to external proposals.<a href="#section-11.1.7-4" class="pilcrow">¶</a></p>
-<p id="section-11.1.7-5">An external proposal MUST be sent as an MLSPlaintext
+have the same mapping and apply the same policies to external proposals.<a href="#section-11.1.8-4" class="pilcrow">¶</a></p>
+<p id="section-11.1.8-5">An external proposal MUST be sent as an MLSPlaintext
 object, since the sender will not have the keys necessary to construct an
-MLSCiphertext object.<a href="#section-11.1.7-5" class="pilcrow">¶</a></p>
+MLSCiphertext object.<a href="#section-11.1.8-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4142,12 +4320,12 @@ message, but will have the secrets they need to participate in the epoch
 initiated by the Commit message.<a href="#section-11.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-11.2.2-2">In order to allow the same Welcome message to be sent to all new members,
 information describing the group is encrypted with a symmetric key and nonce
-randomly chosen by the sender.  This key and nonce are then encrypted to each
-new member using HPKE.  In the same encrypted package, the committer transmits
-the path secret for the lowest node contained in the direct paths of both the
-committer and the new member.  This allows the new member to compute private
-keys for nodes in its direct path that are being reset by the corresponding
-Commit.<a href="#section-11.2.2-2" class="pilcrow">¶</a></p>
+derived from the <code>joiner_secret</code> for the new epoch.  The <code>joiner_secret</code> is
+then encrypted to each new member using HPKE.  In the same encrypted package,
+the committer transmits the path secret for the lowest node contained in the
+direct paths of both the committer and the new member.  This allows the new
+member to compute private keys for nodes in its direct path that are being
+reset by the corresponding Commit.<a href="#section-11.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-11.2.2-3">If the sender of the Welcome message wants the receiving member to include a PSK
 in the derivation of the <code>epoch_secret</code>, they can populate the <code>psks</code> field indicating which
 PSK to use.<a href="#section-11.2.2-3" class="pilcrow">¶</a></p>
@@ -4206,16 +4384,15 @@ If a <code>PreSharedKeyID</code> is part of the GroupSecrets and the client is n
 possession of the corresponding PSK, return an error.<a href="#section-11.2.2-7.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-11.2.2-7.3">From the <code>joiner_secret</code> in the decrypted GroupSecrets object and the PSKs
-specified in the <code>GroupSecrets</code>, derive the <code>member_secret</code> and using that the
-<code>welcome_secret</code>, <code>welcome_key</code>, and <code>welcome_nonce</code>. Use the key and nonce to
-decrypt the <code>encrypted_group_info</code> field.<a href="#section-11.2.2-7.3" class="pilcrow">¶</a>
+specified in the <code>GroupSecrets</code>, derive the <code>welcome_secret</code> and using that
+the <code>welcome_key</code> and <code>welcome_nonce</code>. Use the key and nonce to decrypt the
+<code>encrypted_group_info</code> field.<a href="#section-11.2.2-7.3" class="pilcrow">¶</a>
 </li>
           </ul>
 <div class="artwork art-text alignLeft" id="section-11.2.2-8">
 <pre>
-welcome_secret = Derive-Secret(member_secret, "welcome")
-welcome_nonce = KDF.Expand(welcome_secret, "nonce", nonce_length)
-welcome_key = KDF.Expand(welcome_secret, "key", key_length)
+welcome_nonce = KDF.Expand(welcome_secret, "nonce", AEAD.Nn)
+welcome_key = KDF.Expand(welcome_secret, "key", AEAD.Nk)
 </pre><a href="#section-11.2.2-8" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
@@ -4234,7 +4411,9 @@ in the GroupInfo.<a href="#section-11.2.2-9.2.2.1" class="pilcrow">¶</a>
 children are non-empty and have the hash of this node set as their
 <code>parent_hash</code> value (if the child is another parent) or has a <code>parent_hash</code>
 extension in the KeyPackage containing the same value (if the child is a
-leaf).<a href="#section-11.2.2-9.2.2.2" class="pilcrow">¶</a>
+leaf). If either of the node's children is empty, and in particular does not
+have a parent hash, then its respective children's <code>parent_hash</code> values have
+to be considered instead.<a href="#section-11.2.2-9.2.2.2" class="pilcrow">¶</a>
 </li>
                 <li class="normal" id="section-11.2.2-9.2.2.3">For each non-empty leaf node, verify the signature on the KeyPackage.<a href="#section-11.2.2-9.2.2.3" class="pilcrow">¶</a>
 </li>
@@ -4614,7 +4793,7 @@ the use of a <code>membership_tag</code> which constitutes a MAC over the messag
 key derived from the group secrets.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
 <p id="section-15.2-2">The second form of authentication is that group members can verify a message
 originated from a particular member of the group. This is guaranteed by a
-digital signature on each message from the sender's identity key.<a href="#section-15.2-2" class="pilcrow">¶</a></p>
+digital signature on each message from the sender's signature key.<a href="#section-15.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="forward-secrecy-and-post-compromise-security">
@@ -5235,27 +5414,27 @@ thyla.van.der@merwe.tech<a href="#section-17-1.12.3" class="pilcrow">¶</a></p>
 <dl class="references">
 <dt id="I-D.irtf-cfrg-hpke">[I-D.irtf-cfrg-hpke]</dt>
         <dd>
-<span class="refAuthor">Barnes, R.</span><span class="refAuthor">, Bhargavan, K.</span><span class="refAuthor">, Lipp, B.</span><span class="refAuthor">, and C. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hpke-06</span>, <time datetime="2020-10-23" class="refDate">23 October 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-irtf-cfrg-hpke-06.txt">http://www.ietf.org/internet-drafts/draft-irtf-cfrg-hpke-06.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Barnes, R. L.</span><span class="refAuthor">, Bhargavan, K.</span><span class="refAuthor">, Lipp, B.</span><span class="refAuthor">, and C. A. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hpke-08</span>, <time datetime="2021-02-15" class="refDate">15 February 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hpke-08.txt">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hpke-08.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2104">[RFC2104]</dt>
         <dd>
-<span class="refAuthor">Krawczyk, H.</span><span class="refAuthor">, Bellare, M.</span><span class="refAuthor">, and R. Canetti</span>, <span class="refTitle">"HMAC: Keyed-Hashing for Message Authentication"</span>, <span class="seriesInfo">RFC 2104</span>, <span class="seriesInfo">DOI 10.17487/RFC2104</span>, <time datetime="1997-02" class="refDate">February 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2104">https://www.rfc-editor.org/info/rfc2104</a>&gt;</span>. </dd>
+<span class="refAuthor">Krawczyk, H.</span><span class="refAuthor">, Bellare, M.</span><span class="refAuthor">, and R. Canetti</span>, <span class="refTitle">"HMAC: Keyed-Hashing for Message Authentication"</span>, <span class="seriesInfo">RFC 2104</span>, <span class="seriesInfo">DOI 10.17487/RFC2104</span>, <time datetime="1997-02" class="refDate">February 1997</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc2104">https://datatracker.ietf.org/doc/html/rfc2104</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8126">[RFC8126]</dt>
         <dd>
-<span class="refAuthor">Cotton, M.</span><span class="refAuthor">, Leiba, B.</span><span class="refAuthor">, and T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8126">https://www.rfc-editor.org/info/rfc8126</a>&gt;</span>. </dd>
+<span class="refAuthor">Cotton, M.</span><span class="refAuthor">, Leiba, B.</span><span class="refAuthor">, and T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc8126">https://datatracker.ietf.org/doc/html/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc8174">https://datatracker.ietf.org/doc/html/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8446">[RFC8446]</dt>
       <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc8446">https://datatracker.ietf.org/doc/html/rfc8446</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -5282,15 +5461,15 @@ thyla.van.der@merwe.tech<a href="#section-17-1.12.3" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="I-D.ietf-mls-architecture">[I-D.ietf-mls-architecture]</dt>
         <dd>
-<span class="refAuthor">Omara, E.</span><span class="refAuthor">, Beurdouche, B.</span><span class="refAuthor">, Rescorla, E.</span><span class="refAuthor">, Inguva, S.</span><span class="refAuthor">, Kwon, A.</span><span class="refAuthor">, and A. Duric</span>, <span class="refTitle">"The Messaging Layer Security (MLS) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-mls-architecture-05</span>, <time datetime="2020-07-26" class="refDate">26 July 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-mls-architecture-05.txt">http://www.ietf.org/internet-drafts/draft-ietf-mls-architecture-05.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Omara, E.</span><span class="refAuthor">, Beurdouche, B.</span><span class="refAuthor">, Rescorla, E.</span><span class="refAuthor">, Inguva, S.</span><span class="refAuthor">, Kwon, A.</span><span class="refAuthor">, and A. Duric</span>, <span class="refTitle">"The Messaging Layer Security (MLS) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-mls-architecture-05</span>, <time datetime="2020-07-26" class="refDate">26 July 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-architecture-05.txt">https://datatracker.ietf.org/doc/html/draft-ietf-mls-architecture-05.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-trans-rfc6962-bis">[I-D.ietf-trans-rfc6962-bis]</dt>
         <dd>
-<span class="refAuthor">Laurie, B.</span><span class="refAuthor">, Langley, A.</span><span class="refAuthor">, Kasper, E.</span><span class="refAuthor">, Messeri, E.</span><span class="refAuthor">, and R. Stradling</span>, <span class="refTitle">"Certificate Transparency Version 2.0"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-trans-rfc6962-bis-34</span>, <time datetime="2019-11-04" class="refDate">4 November 2019</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-trans-rfc6962-bis-34.txt">http://www.ietf.org/internet-drafts/draft-ietf-trans-rfc6962-bis-34.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Laurie, B.</span><span class="refAuthor">, Langley, A.</span><span class="refAuthor">, Kasper, E.</span><span class="refAuthor">, Messeri, E.</span><span class="refAuthor">, and R. Stradling</span>, <span class="refTitle">"Certificate Transparency Version 2.0"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-trans-rfc6962-bis-34</span>, <time datetime="2019-11-04" class="refDate">4 November 2019</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-trans-rfc6962-bis-34.txt">https://datatracker.ietf.org/doc/html/draft-ietf-trans-rfc6962-bis-34.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8032">[RFC8032]</dt>
         <dd>
-<span class="refAuthor">Josefsson, S.</span><span class="refAuthor"> and I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8032">https://www.rfc-editor.org/info/rfc8032</a>&gt;</span>. </dd>
+<span class="refAuthor">Josefsson, S.</span><span class="refAuthor"> and I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc8032">https://datatracker.ietf.org/doc/html/rfc8032</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SECG">[SECG]</dt>
         <dd>
